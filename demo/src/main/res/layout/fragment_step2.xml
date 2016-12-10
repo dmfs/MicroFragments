@@ -1,0 +1,37 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:background="#00ff00"
+             android:layout_height="match_parent"
+             tools:context="org.dmfs.android.dumbledore.demo.Step2Fragment">
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/hello_blank_fragment"/>
+
+
+    <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
+
+        <Button
+                android:gravity="center"
+                android:id="@android:id/button1"
+                android:layout_margin="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Back to Step 1"/>
+
+        <Button
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:id="@android:id/button2"
+                android:layout_margin="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="To final step (with no return)"/>
+    </LinearLayout>
+</FrameLayout>
