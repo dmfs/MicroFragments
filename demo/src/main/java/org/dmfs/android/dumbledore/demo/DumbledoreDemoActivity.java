@@ -18,15 +18,16 @@
 package org.dmfs.android.dumbledore.demo;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import org.dmfs.android.dumbledore.SimpleWizard;
 import org.dmfs.android.dumbledore.WizardState;
-import org.dmfs.android.dumbledore.demo.dovecote.LbDovecote;
 import org.dmfs.android.dumbledore.demo.wizardsteps.WizardStep1;
 import org.dmfs.android.dumbledore.transitions.BackWizardTransition;
-import org.dmfs.android.pigeonpost.Dovecote;
+import org.dmfs.pigeonpost.Dovecote;
+import org.dmfs.pigeonpost.localbroadcast.LocalBroadcastDovecote;
 
 
 public final class DumbledoreDemoActivity extends AppCompatActivity implements Dovecote.OnPigeonReturnCallback<WizardState>
@@ -44,7 +45,7 @@ public final class DumbledoreDemoActivity extends AppCompatActivity implements D
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        mDovecote = new LbDovecote<>(this, "wizard-line", this);
+        mDovecote = new LocalBroadcastDovecote<>(this, "wizard-line", this);
 
         if (savedInstanceState == null)
         {
@@ -62,7 +63,7 @@ public final class DumbledoreDemoActivity extends AppCompatActivity implements D
 
 
     @Override
-    public void onPigeonReturn(WizardState payload)
+    public void onPigeonReturn(@NonNull WizardState payload)
     {
         getSupportActionBar().setTitle(payload.currentStep().title(this));
         mLeaveOnBack = payload.backStackSize() == 0;

@@ -56,13 +56,13 @@ public final class ForwardSwipeOperation extends AbstractWizardOperation
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         if (useRtl(context))
         {
-            transaction.setCustomAnimations(R.anim.wand_wizard_enter_left, R.anim.wand_wizard_exit_right, R.anim.wand_wizard_enter_right,
-                    R.anim.wand_wizard_exit_left);
+            transaction.setCustomAnimations(R.anim.dumbledore_wizard_enter_left, R.anim.dumbledore_wizard_exit_right, R.anim.dumbledore_wizard_enter_right,
+                    R.anim.dumbledore_wizard_exit_left);
         }
         else
         {
-            transaction.setCustomAnimations(R.anim.wand_wizard_enter_right, R.anim.wand_wizard_exit_left, R.anim.wand_wizard_enter_left,
-                    R.anim.wand_wizard_exit_right);
+            transaction.setCustomAnimations(R.anim.dumbledore_wizard_enter_right, R.anim.dumbledore_wizard_exit_left, R.anim.dumbledore_wizard_enter_left,
+                    R.anim.dumbledore_wizard_exit_right);
         }
         transaction.replace(R.id.dumbledore_wizard_host, mNextStep.fragment(context));
         if (fragmentManager.getBackStackEntryCount() > 0 || !previousStep.skipOnBack())

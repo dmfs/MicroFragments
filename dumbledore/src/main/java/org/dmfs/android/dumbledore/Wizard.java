@@ -20,8 +20,8 @@ package org.dmfs.android.dumbledore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 
-import org.dmfs.android.pigeonpost.Cage;
-import org.dmfs.android.pigeonpost.Pigeon;
+import org.dmfs.pigeonpost.Cage;
+import org.dmfs.pigeonpost.Pigeon;
 
 
 /**

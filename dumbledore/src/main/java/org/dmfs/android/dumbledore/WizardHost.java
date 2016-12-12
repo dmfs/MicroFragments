@@ -34,7 +34,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 
 import org.dmfs.android.dumbledore.operations.WizardOperation;
-import org.dmfs.android.pigeonpost.Cage;
+import org.dmfs.pigeonpost.Cage;
 
 import static org.dmfs.android.dumbledore.transitions.AbstractWizardTransition.ACTION_WIZARD_OPERATION;
 import static org.dmfs.android.dumbledore.transitions.AbstractWizardTransition.EXTRA_WIZARD_OPERATION;
@@ -131,7 +131,7 @@ public final class WizardHost extends Fragment implements FragmentManager.OnBack
     private void postUpdate(WizardStep currentStep)
     {
         Cage<WizardState> cage = getArguments().getParcelable("cage");
-        if (cage == null)
+        if (cage == null || !isAdded())
         {
             // no pigeon to be send
             return;
@@ -169,12 +169,9 @@ public final class WizardHost extends Fragment implements FragmentManager.OnBack
                             InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                             inputManager.hideSoftInputFromWindow(getActivity().findViewById(android.R.id.content).getWindowToken(), 0);
                         }
-
-                        // postUpdate(wizardStep);
                     }
                 }
             });
         }
     };
-
 }
