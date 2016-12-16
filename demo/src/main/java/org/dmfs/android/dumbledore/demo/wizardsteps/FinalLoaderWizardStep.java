@@ -35,7 +35,7 @@ import org.dmfs.android.dumbledore.transitions.ResetWizardTransition;
 /**
  * @author Marten Gajda
  */
-public final class FinalLoaderWizardStep implements WizardStep
+public final class FinalLoaderWizardStep implements WizardStep<Void>
 {
     @Override
     public String title(Context context)
@@ -52,6 +52,13 @@ public final class FinalLoaderWizardStep implements WizardStep
         args.putParcelable(ARG_WIZARD_STEP, this);
         fragment.setArguments(args);
         return fragment;
+    }
+
+
+    @Override
+    public Void parameters()
+    {
+        return null;
     }
 
 

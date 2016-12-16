@@ -20,38 +20,84 @@ package org.dmfs.android.dumbledore.demo.wizardsteps;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Parcel;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import org.dmfs.android.dumbledore.WizardStep;
 import org.dmfs.android.dumbledore.demo.R;
 import org.dmfs.android.dumbledore.transitions.BackWizardTransition;
 import org.dmfs.android.dumbledore.transitions.ForwardWizardTransition;
 
+import java.net.URI;
+
 
 /**
  * Created by marten on 09.12.16.
  */
-
-public final class WizardStep2 implements WizardStep
+public final class WizardStep2 implements WizardStep<WizardStep2.Step2Params>
 {
+
+    interface Step2Params
+    {
+        String name();
+
+        URI uri();
+    }
+
+
+    private final Step2Params mParams;
+
+
+    public WizardStep2(final String name, final URI uri)
+    {
+        mParams = new Step2Params()
+        {
+
+            @Override
+            public String name()
+            {
+                return name;
+            }
+
+
+            @Override
+            public URI uri()
+            {
+                return uri;
+            }
+        };
+    }
+
+
+    @NonNull
     @Override
-    public String title(Context context)
+    public String title(@NonNull Context context)
     {
         return "Wizard Step 2";
     }
 
 
+    @NonNull
     @Override
-    public Fragment fragment(Context context)
+    public Fragment fragment(@NonNull Context context)
     {
         Fragment fragment = new Step2Fragment();
         Bundle args = new Bundle();
         args.putParcelable(ARG_WIZARD_STEP, this);
         fragment.setArguments(args);
         return fragment;
+    }
+
+
+    @Override
+    public Step2Params parameters()
+    {
+        return mParams;
     }
 
 
@@ -72,6 +118,8 @@ public final class WizardStep2 implements WizardStep
     @Override
     public void writeToParcel(Parcel dest, int flags)
     {
+        dest.writeString(mParams.name());
+        dest.writeSerializable(mParams.uri());
     }
 
 
@@ -80,7 +128,7 @@ public final class WizardStep2 implements WizardStep
         @Override
         public WizardStep2 createFromParcel(Parcel source)
         {
-            return new WizardStep2();
+            return new WizardStep2(source.readString(), (URI) source.readSerializable());
         }
 
 
@@ -97,10 +145,14 @@ public final class WizardStep2 implements WizardStep
      */
     public static class Step2Fragment extends Fragment implements View.OnClickListener
     {
+        private WizardStep<Step2Params> mStep;
 
-        public Step2Fragment()
+
+        @Override
+        public void onCreate(@Nullable Bundle savedInstanceState)
         {
-            // Required empty public constructor
+            super.onCreate(savedInstanceState);
+            mStep = getArguments().getParcelable(WizardStep.ARG_WIZARD_STEP);
         }
 
 
@@ -110,6 +162,8 @@ public final class WizardStep2 implements WizardStep
         {
             // Inflate the layout for this fragment
             View view = inflater.inflate(R.layout.fragment_step2, container, false);
+            ((TextView) view.findViewById(R.id.text)).setText(mStep.parameters().name() + " " + mStep.parameters().uri().toASCIIString());
+
             view.findViewById(android.R.id.button1).setOnClickListener(this);
             view.findViewById(android.R.id.button2).setOnClickListener(this);
             return view;

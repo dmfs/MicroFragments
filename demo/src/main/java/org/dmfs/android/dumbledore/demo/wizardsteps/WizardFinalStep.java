@@ -32,13 +32,12 @@ import org.dmfs.android.dumbledore.demo.R;
 /**
  * Created by marten on 09.12.16.
  */
-
-public final class WizardFinalStep implements WizardStep
+public final class WizardFinalStep implements WizardStep<Void>
 {
     @Override
     public String title(Context context)
     {
-        return "Wizard Step 1";
+        return "Last Wizard Step";
     }
 
 
@@ -50,6 +49,13 @@ public final class WizardFinalStep implements WizardStep
         args.putParcelable(ARG_WIZARD_STEP, this);
         fragment.setArguments(args);
         return fragment;
+    }
+
+
+    @Override
+    public Void parameters()
+    {
+        return null;
     }
 
 

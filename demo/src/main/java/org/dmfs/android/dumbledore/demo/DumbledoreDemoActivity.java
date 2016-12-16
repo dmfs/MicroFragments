@@ -49,7 +49,7 @@ public final class DumbledoreDemoActivity extends AppCompatActivity implements D
 
         if (savedInstanceState == null)
         {
-            new SimpleWizard(new WizardStep1(), R.id.wizard_host).withPigeonCage(mDovecote.cage()).start(this);
+            new SimpleWizard(new WizardStep1("WizardStep1"), R.id.wizard_host).withPigeonCage(mDovecote.cage()).start(this);
         }
     }
 

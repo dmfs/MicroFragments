@@ -31,11 +31,13 @@ import org.dmfs.android.dumbledore.WizardStep;
 import org.dmfs.android.dumbledore.demo.R;
 import org.dmfs.android.dumbledore.transitions.ForwardWizardTransition;
 
+import java.net.URI;
+
 
 /**
  * @author Marten Gajda
  */
-public final class IntermediateLoaderWizardStep implements WizardStep
+public final class IntermediateLoaderWizardStep implements WizardStep<Void>
 {
     @Override
     public String title(Context context)
@@ -52,6 +54,13 @@ public final class IntermediateLoaderWizardStep implements WizardStep
         args.putParcelable(ARG_WIZARD_STEP, this);
         fragment.setArguments(args);
         return fragment;
+    }
+
+
+    @Override
+    public Void parameters()
+    {
+        return null;
     }
 
 
@@ -120,7 +129,7 @@ public final class IntermediateLoaderWizardStep implements WizardStep
                     @Override
                     public void run()
                     {
-                        new ForwardWizardTransition(new WizardStep2()).execute(getActivity());
+                        new ForwardWizardTransition(new WizardStep2("Step2", URI.create("http://example.com"))).execute(getActivity());
                     }
                 }, DELAY_WAIT_MESSAGE * 2);
             }

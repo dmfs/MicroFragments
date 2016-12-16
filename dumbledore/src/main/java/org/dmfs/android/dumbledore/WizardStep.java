@@ -26,7 +26,7 @@ import android.support.v4.app.Fragment;
 /**
  * Interface of a specific step of the wizard.
  */
-public interface WizardStep extends Parcelable
+public interface WizardStep<T> extends Parcelable
 {
     /**
      * The Fragment argument that contains the WizardStep that a Fragment belongs to. This must be set on every wizard fragment.
@@ -54,6 +54,13 @@ public interface WizardStep extends Parcelable
      */
     @NonNull
     Fragment fragment(@NonNull Context context);
+
+    /**
+     * The parameters of this step.
+     *
+     * @return The parameter object.
+     */
+    T parameters();
 
     /**
      * True if this step should be skipped when going back to the previous step.

@@ -20,10 +20,12 @@ package org.dmfs.android.dumbledore.demo.wizardsteps;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Parcel;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import org.dmfs.android.dumbledore.WizardStep;
 import org.dmfs.android.dumbledore.demo.R;
@@ -34,12 +36,22 @@ import org.dmfs.android.dumbledore.transitions.ForwardWizardTransition;
  * Created by marten on 09.12.16.
  */
 
-public final class WizardStep1 implements WizardStep
+public final class WizardStep1 implements WizardStep<String>
 {
+
+    private final String mName;
+
+
+    public WizardStep1(String name)
+    {
+        mName = name;
+    }
+
+
     @Override
     public String title(Context context)
     {
-        return "Wizard Step 1";
+        return mName;
     }
 
 
@@ -51,6 +63,13 @@ public final class WizardStep1 implements WizardStep
         args.putParcelable(ARG_WIZARD_STEP, this);
         fragment.setArguments(args);
         return fragment;
+    }
+
+
+    @Override
+    public String parameters()
+    {
+        return mName;
     }
 
 
@@ -71,7 +90,7 @@ public final class WizardStep1 implements WizardStep
     @Override
     public void writeToParcel(Parcel dest, int flags)
     {
-
+        dest.writeString(mName);
     }
 
 
@@ -80,7 +99,7 @@ public final class WizardStep1 implements WizardStep
         @Override
         public WizardStep1 createFromParcel(Parcel source)
         {
-            return new WizardStep1();
+            return new WizardStep1(source.readString());
         }
 
 
@@ -98,9 +117,14 @@ public final class WizardStep1 implements WizardStep
     public static class Step1Fragment extends Fragment implements View.OnClickListener
     {
 
-        public Step1Fragment()
+        private WizardStep<String> mWizardStep;
+
+
+        @Override
+        public void onCreate(@Nullable Bundle savedInstanceState)
         {
-            // Required empty public constructor
+            super.onCreate(savedInstanceState);
+            mWizardStep = getArguments().getParcelable(WizardStep.ARG_WIZARD_STEP);
         }
 
 
@@ -110,6 +134,8 @@ public final class WizardStep1 implements WizardStep
         {
             // Inflate the layout for this fragment
             View view = inflater.inflate(R.layout.fragment_step1, container, false);
+
+            ((TextView) view.findViewById(R.id.text)).setText(getActivity().getString(R.string.hello_fragment, mWizardStep.parameters()));
             view.findViewById(android.R.id.button1).setOnClickListener(this);
             return view;
         }
