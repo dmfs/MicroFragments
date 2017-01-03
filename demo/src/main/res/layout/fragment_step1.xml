@@ -3,7 +3,7 @@
              android:layout_width="match_parent"
              android:layout_height="match_parent"
              android:background="#ff0000"
-             tools:context="org.dmfs.android.dumbledore.demo.Step1Fragment">
+             tools:context="org.dmfs.android.microfragments.demo.microfragments.MicroFragment1">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView

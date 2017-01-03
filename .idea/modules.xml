@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Dumbledore.iml" filepath="$PROJECT_DIR$/Dumbledore.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MicroFragments.iml" filepath="$PROJECT_DIR$/MicroFragments.iml" />
       <module fileurl="file://$PROJECT_DIR$/demo/demo.iml" filepath="$PROJECT_DIR$/demo/demo.iml" />
-      <module fileurl="file://$PROJECT_DIR$/dumbledore/dumbledore.iml" filepath="$PROJECT_DIR$/dumbledore/dumbledore.iml" />
+      <module fileurl="file://$PROJECT_DIR$/microfragments/microfragments.iml" filepath="$PROJECT_DIR$/microfragments/microfragments.iml" />
     </modules>
   </component>
 </project>

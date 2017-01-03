@@ -3,7 +3,7 @@
              android:layout_width="match_parent"
              android:background="#00ff00"
              android:layout_height="match_parent"
-             tools:context="org.dmfs.android.dumbledore.demo.Step2Fragment">
+             tools:context="org.dmfs.android.microfragments.demo.Step2Fragment">
 
     <TextView
             android:id="@+id/text"
