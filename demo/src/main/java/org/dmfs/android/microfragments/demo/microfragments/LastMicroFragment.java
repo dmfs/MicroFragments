@@ -33,7 +33,7 @@ import org.dmfs.android.microfragments.demo.R;
 /**
  * Created by marten on 09.12.16.
  */
-public final class MicroFragment implements org.dmfs.android.microfragments.MicroFragment<Void>
+public final class LastMicroFragment implements org.dmfs.android.microfragments.MicroFragment<Void>
 {
     @Override
     public String title(Context context)
@@ -83,19 +83,19 @@ public final class MicroFragment implements org.dmfs.android.microfragments.Micr
     }
 
 
-    public Creator<org.dmfs.android.microfragments.demo.microfragments.MicroFragment> CREATOR = new Creator<org.dmfs.android.microfragments.demo.microfragments.MicroFragment>()
+    public final static Creator<LastMicroFragment> CREATOR = new Creator<LastMicroFragment>()
     {
         @Override
-        public org.dmfs.android.microfragments.demo.microfragments.MicroFragment createFromParcel(Parcel source)
+        public LastMicroFragment createFromParcel(Parcel source)
         {
-            return new org.dmfs.android.microfragments.demo.microfragments.MicroFragment();
+            return new LastMicroFragment();
         }
 
 
         @Override
-        public org.dmfs.android.microfragments.demo.microfragments.MicroFragment[] newArray(int size)
+        public LastMicroFragment[] newArray(int size)
         {
-            return new org.dmfs.android.microfragments.demo.microfragments.MicroFragment[size];
+            return new LastMicroFragment[size];
         }
     };
 

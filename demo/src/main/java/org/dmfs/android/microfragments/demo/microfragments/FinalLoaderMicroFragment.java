@@ -87,7 +87,7 @@ public final class FinalLoaderMicroFragment implements MicroFragment<Void>
     }
 
 
-    public Creator<FinalLoaderMicroFragment> CREATOR = new Creator<FinalLoaderMicroFragment>()
+    public final static Creator<FinalLoaderMicroFragment> CREATOR = new Creator<FinalLoaderMicroFragment>()
     {
         @Override
         public FinalLoaderMicroFragment createFromParcel(Parcel source)
@@ -144,7 +144,7 @@ public final class FinalLoaderMicroFragment implements MicroFragment<Void>
                 if (isAdded())
                 {
                     MicroFragmentHost host = getArguments().getParcelable("host");
-                    host.execute(getActivity(), new ResetFragmentTransition(new org.dmfs.android.microfragments.demo.microfragments.MicroFragment()));
+                    host.execute(getActivity(), new ResetFragmentTransition(new LastMicroFragment()));
                 }
             }
         };

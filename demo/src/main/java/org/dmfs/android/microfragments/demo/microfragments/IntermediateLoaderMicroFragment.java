@@ -90,7 +90,7 @@ public final class IntermediateLoaderMicroFragment implements MicroFragment<Void
     }
 
 
-    public Creator<IntermediateLoaderMicroFragment> CREATOR = new Creator<IntermediateLoaderMicroFragment>()
+    public final static Creator<IntermediateLoaderMicroFragment> CREATOR = new Creator<IntermediateLoaderMicroFragment>()
     {
         @Override
         public IntermediateLoaderMicroFragment createFromParcel(Parcel source)

@@ -126,7 +126,7 @@ public final class MicroFragment2 implements MicroFragment<MicroFragment2.Step2P
     }
 
 
-    public Creator<MicroFragment2> CREATOR = new Creator<MicroFragment2>()
+    public final static Creator<MicroFragment2> CREATOR = new Creator<MicroFragment2>()
     {
         @Override
         public MicroFragment2 createFromParcel(Parcel source)

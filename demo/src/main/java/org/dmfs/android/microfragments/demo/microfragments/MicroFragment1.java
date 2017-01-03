@@ -38,7 +38,6 @@ import org.dmfs.android.microfragments.transitions.Swiped;
 /**
  * Created by marten on 09.12.16.
  */
-
 public final class MicroFragment1 implements MicroFragment<String>
 {
 
@@ -98,7 +97,7 @@ public final class MicroFragment1 implements MicroFragment<String>
     }
 
 
-    public Creator<MicroFragment1> CREATOR = new Creator<MicroFragment1>()
+    public final static Creator<MicroFragment1> CREATOR = new Creator<MicroFragment1>()
     {
         @Override
         public MicroFragment1 createFromParcel(Parcel source)
