@@ -33,7 +33,7 @@ public final class UiTimestamp implements Timestamp, Parcelable
 
     public UiTimestamp()
     {
-        this(System.nanoTime());
+        this(System.nanoTime() / 10000000 /* convert to millis */);
         if (Looper.getMainLooper() != Looper.myLooper())
         {
             throw new IllegalStateException("UiTimestamp must be created on the main thread.");
