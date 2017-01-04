@@ -144,7 +144,7 @@ public final class IntermediateLoaderMicroFragment implements MicroFragment<Void
             @Override
             public void run()
             {
-                if (isAdded())
+                if (isAdded() && isResumed())
                 {
                     MicroFragmentHost host = getArguments().getParcelable("host");
                     host.execute(getActivity(),

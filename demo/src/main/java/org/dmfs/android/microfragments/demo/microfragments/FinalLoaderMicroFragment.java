@@ -124,15 +124,7 @@ public final class FinalLoaderMicroFragment implements MicroFragment<Void>
         public void onStart()
         {
             super.onStart();
-            mHandler.postDelayed(mFakeLoader, DELAY_WAIT_MESSAGE / 2);
-        }
-
-
-        @Override
-        public void onStop()
-        {
-            mHandler.removeCallbacks(mFakeLoader);
-            super.onStop();
+            new Thread(mFakeLoader).start();
         }
 
 
@@ -141,7 +133,15 @@ public final class FinalLoaderMicroFragment implements MicroFragment<Void>
             @Override
             public void run()
             {
-                if (isAdded())
+                try
+                {
+                    Thread.sleep(DELAY_WAIT_MESSAGE);
+                }
+                catch (InterruptedException e)
+                {
+                }
+
+                if (isAdded() && isResumed())
                 {
                     MicroFragmentHost host = getArguments().getParcelable("host");
                     host.execute(getActivity(), new ResetFragmentTransition(new LastMicroFragment()));
