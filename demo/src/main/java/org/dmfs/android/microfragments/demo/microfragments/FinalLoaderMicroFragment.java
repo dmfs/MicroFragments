@@ -107,7 +107,15 @@ public final class FinalLoaderMicroFragment implements MicroFragment<Void>
     public static class LoadFragment extends Fragment
     {
         private final static int DELAY_WAIT_MESSAGE = 2500;
-        private final UiTimestamp mTimestamp = new UiTimestamp();
+        private UiTimestamp mTimestamp;
+
+
+        @Override
+        public void onCreate(@Nullable Bundle savedInstanceState)
+        {
+            super.onCreate(savedInstanceState);
+            mTimestamp = new UiTimestamp();
+        }
 
 
         @Nullable
