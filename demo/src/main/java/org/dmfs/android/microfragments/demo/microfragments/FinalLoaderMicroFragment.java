@@ -134,14 +134,7 @@ public final class FinalLoaderMicroFragment implements MicroFragment<Void>
             super.onStart();
             new Loader(mTimestamp).start();
         }
-
-
-        @Override
-        public void onSaveInstanceState(Bundle outState)
-        {
-            super.onSaveInstanceState(outState);
-        }
-
+        
 
         private final class Loader extends Thread
         {
