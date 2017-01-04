@@ -26,6 +26,8 @@ import android.support.v4.app.FragmentTransaction;
 
 import org.dmfs.android.microfragments.MicroFragment;
 import org.dmfs.android.microfragments.MicroFragmentHost;
+import org.dmfs.android.microfragments.Timestamp;
+import org.dmfs.android.microfragments.UiTimestamp;
 
 
 /**
@@ -36,11 +38,28 @@ import org.dmfs.android.microfragments.MicroFragmentHost;
 public final class BackTransition implements FragmentTransition
 {
 
+    private final Timestamp mTimestamp;
+
+
     /**
      * Creates a {@link FragmentTransition} that goes back to the previous {@link MicroFragment}.
      */
     public BackTransition()
     {
+        this(new UiTimestamp());
+    }
+
+
+    public BackTransition(Timestamp timestamp)
+    {
+        mTimestamp = timestamp;
+    }
+
+
+    @Override
+    public Timestamp timestamp()
+    {
+        return mTimestamp;
     }
 
 
@@ -76,7 +95,7 @@ public final class BackTransition implements FragmentTransition
     @Override
     public void writeToParcel(Parcel dest, int flags)
     {
-        // nothing to write here
+        dest.writeParcelable(mTimestamp, flags);
     }
 
 
@@ -85,7 +104,7 @@ public final class BackTransition implements FragmentTransition
         @Override
         public BackTransition createFromParcel(Parcel source)
         {
-            return new BackTransition();
+            return new BackTransition((Timestamp) source.readParcelable(getClass().getClassLoader()));
         }
 
 

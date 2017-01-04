@@ -26,6 +26,8 @@ import android.support.v4.app.FragmentTransaction;
 
 import org.dmfs.android.microfragments.MicroFragment;
 import org.dmfs.android.microfragments.MicroFragmentHost;
+import org.dmfs.android.microfragments.Timestamp;
+import org.dmfs.android.microfragments.UiTimestamp;
 
 
 /**
@@ -38,13 +40,32 @@ public final class BackWithResultTransition implements FragmentTransition
 
     private final Parcelable mResult;
 
+    private final Timestamp mTimestamp;
+
 
     /**
      * Creates a {@link FragmentTransition} that goes back to the previous {@link MicroFragment}.
      */
     public BackWithResultTransition(Parcelable result)
     {
+        this(result, new UiTimestamp());
+    }
+
+
+    /**
+     * Creates a {@link FragmentTransition} that goes back to the previous {@link MicroFragment}.
+     */
+    public BackWithResultTransition(Parcelable result, Timestamp timestamp)
+    {
         mResult = result;
+        mTimestamp = timestamp;
+    }
+
+
+    @Override
+    public Timestamp timestamp()
+    {
+        return mTimestamp;
     }
 
 
@@ -81,6 +102,7 @@ public final class BackWithResultTransition implements FragmentTransition
     public void writeToParcel(Parcel dest, int flags)
     {
         dest.writeParcelable(mResult, flags);
+        dest.writeParcelable(mTimestamp, flags);
     }
 
 
@@ -89,7 +111,8 @@ public final class BackWithResultTransition implements FragmentTransition
         @Override
         public BackWithResultTransition createFromParcel(Parcel source)
         {
-            return new BackWithResultTransition(source.readParcelable(getClass().getClassLoader()));
+            ClassLoader classLoader = getClass().getClassLoader();
+            return new BackWithResultTransition(source.readParcelable(classLoader), (Timestamp) source.readParcelable(classLoader));
         }
 
 

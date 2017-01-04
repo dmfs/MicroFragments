@@ -19,7 +19,6 @@ package org.dmfs.android.microfragments.demo.microfragments;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Parcel;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -30,6 +29,7 @@ import android.view.ViewGroup;
 
 import org.dmfs.android.microfragments.MicroFragment;
 import org.dmfs.android.microfragments.MicroFragmentHost;
+import org.dmfs.android.microfragments.UiTimestamp;
 import org.dmfs.android.microfragments.demo.R;
 import org.dmfs.android.microfragments.transitions.ResetFragmentTransition;
 
@@ -107,7 +107,7 @@ public final class FinalLoaderMicroFragment implements MicroFragment<Void>
     public static class LoadFragment extends Fragment
     {
         private final static int DELAY_WAIT_MESSAGE = 2500;
-        private final Handler mHandler = new Handler();
+        private final UiTimestamp mTimestamp = new UiTimestamp();
 
 
         @Nullable
@@ -124,29 +124,45 @@ public final class FinalLoaderMicroFragment implements MicroFragment<Void>
         public void onStart()
         {
             super.onStart();
-            new Thread(mFakeLoader).start();
+            new Loader(mTimestamp).start();
         }
 
 
-        private final Runnable mFakeLoader = new Runnable()
+        @Override
+        public void onSaveInstanceState(Bundle outState)
         {
+            super.onSaveInstanceState(outState);
+        }
+
+
+        private final class Loader extends Thread
+        {
+            private final UiTimestamp mTimestamp;
+
+
+            private Loader(UiTimestamp timestamp)
+            {
+                mTimestamp = timestamp;
+            }
+
+
             @Override
             public void run()
             {
                 try
                 {
-                    Thread.sleep(DELAY_WAIT_MESSAGE);
+                    sleep(DELAY_WAIT_MESSAGE);
                 }
                 catch (InterruptedException e)
                 {
                 }
 
-                if (isAdded() && isResumed())
+                if (isResumed())
                 {
                     MicroFragmentHost host = getArguments().getParcelable("host");
-                    host.execute(getActivity(), new ResetFragmentTransition(new LastMicroFragment()));
+                    host.execute(getActivity(), new ResetFragmentTransition(new LastMicroFragment(), mTimestamp));
                 }
             }
-        };
+        }
     }
 }

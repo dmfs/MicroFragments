@@ -25,6 +25,7 @@ import android.support.v4.app.FragmentTransaction;
 import org.dmfs.android.microfragments.MicroFragment;
 import org.dmfs.android.microfragments.MicroFragmentHost;
 import org.dmfs.android.microfragments.R;
+import org.dmfs.android.microfragments.Timestamp;
 
 
 /**
@@ -38,6 +39,13 @@ public final class Swiped implements FragmentTransition
     public Swiped(FragmentTransition delegate)
     {
         mDelegate = delegate;
+    }
+
+
+    @Override
+    public Timestamp timestamp()
+    {
+        return mDelegate.timestamp();
     }
 
 

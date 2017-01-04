@@ -24,6 +24,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,6 +49,7 @@ public final class HostFragment extends Fragment implements FragmentManager.OnBa
     private int mBackStackDepth = 0;
     private ParcelableDovecote<FragmentTransition> mOperationDoveCote;
     private boolean mInstanceStateSaved;
+    private Timestamp mLastTransactionTimestamp = new UiTimestamp();
 
 
     @Override
@@ -148,7 +150,7 @@ public final class HostFragment extends Fragment implements FragmentManager.OnBa
 
 
     @Override
-    public void onPigeonReturn(@NonNull FragmentTransition fragmentOperation)
+    public void onPigeonReturn(@NonNull FragmentTransition fragmentTransition)
     {
         if (mInstanceStateSaved)
         {
@@ -156,19 +158,27 @@ public final class HostFragment extends Fragment implements FragmentManager.OnBa
             return;
         }
 
+        if (!fragmentTransition.timestamp().isAfter(mLastTransactionTimestamp))
+        {
+            // ignore outdated transition
+            Log.i("HostFragment", "outdated transition ignored");
+            return;
+        }
+        mLastTransactionTimestamp = fragmentTransition.timestamp();
+
         MicroFragment microFragment = mFragmentManager.findFragmentById(R.id.microfragments_host)
                 .getArguments()
                 .getParcelable(MicroFragment.ARG_MICRO_FRAGMENT);
         MicroFragmentHost host = new BasicMicroFragmentHost(mOperationDoveCote.cage());
-        fragmentOperation.prepare(getActivity(), mFragmentManager, host, microFragment);
-        FragmentTransaction fragmentTransaction = fragmentOperation.updateTransaction(getActivity(), mFragmentManager.beginTransaction(),
+        fragmentTransition.prepare(getActivity(), mFragmentManager, host, microFragment);
+        FragmentTransaction fragmentTransaction = fragmentTransition.updateTransaction(getActivity(), mFragmentManager.beginTransaction(),
                 mFragmentManager, host, microFragment);
         if (!fragmentTransaction.isEmpty())
         {
             fragmentTransaction.commit();
         }
         mFragmentManager.executePendingTransactions();
-        fragmentOperation.cleanup(getActivity(), mFragmentManager, host, microFragment);
+        fragmentTransition.cleanup(getActivity(), mFragmentManager, host, microFragment);
 
         // close keyboard if necessary
         View view = getActivity().getCurrentFocus();

@@ -25,6 +25,7 @@ import android.support.v4.app.FragmentTransaction;
 
 import org.dmfs.android.microfragments.MicroFragment;
 import org.dmfs.android.microfragments.MicroFragmentHost;
+import org.dmfs.android.microfragments.Timestamp;
 
 
 /**
@@ -34,6 +35,7 @@ import org.dmfs.android.microfragments.MicroFragmentHost;
  */
 public interface FragmentTransition extends Parcelable
 {
+    Timestamp timestamp();
 
     void prepare(@NonNull Context context, @NonNull FragmentManager fragmentManager, @NonNull MicroFragmentHost host, @NonNull MicroFragment previousStep);
 
@@ -44,8 +46,9 @@ public interface FragmentTransition extends Parcelable
      *         A Context.
      * @param fragmentTransaction
      * @param fragmentManager
-     *@param previousStep
-     *  @return A {@link FragmentTransaction} that performs this transition.
+     * @param previousStep
+     *
+     * @return A {@link FragmentTransaction} that performs this transition.
      */
     FragmentTransaction updateTransaction(@NonNull Context context, @NonNull FragmentTransaction fragmentTransaction, FragmentManager fragmentManager, @NonNull MicroFragmentHost host, @NonNull MicroFragment previousStep);
 

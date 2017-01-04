@@ -27,6 +27,8 @@ import android.support.v4.app.FragmentTransaction;
 import org.dmfs.android.microfragments.MicroFragment;
 import org.dmfs.android.microfragments.MicroFragmentHost;
 import org.dmfs.android.microfragments.R;
+import org.dmfs.android.microfragments.Timestamp;
+import org.dmfs.android.microfragments.UiTimestamp;
 
 
 /**
@@ -37,6 +39,7 @@ import org.dmfs.android.microfragments.R;
 public final class OverlayTransition implements FragmentTransition, Parcelable
 {
     private final MicroFragment mNextStep;
+    private final Timestamp mTimestamp;
 
 
     /**
@@ -47,7 +50,27 @@ public final class OverlayTransition implements FragmentTransition, Parcelable
      */
     public OverlayTransition(@NonNull MicroFragment nextStep)
     {
+        this(nextStep, new UiTimestamp());
+    }
+
+
+    /**
+     * Creates a {@link FragmentTransition} that swipes to the given {@link MicroFragment}.
+     *
+     * @param nextStep
+     *         The next {@link MicroFragment}.
+     */
+    public OverlayTransition(@NonNull MicroFragment nextStep, Timestamp timestamp)
+    {
         mNextStep = nextStep;
+        mTimestamp = timestamp;
+    }
+
+
+    @Override
+    public Timestamp timestamp()
+    {
+        return mTimestamp;
     }
 
 
@@ -98,7 +121,8 @@ public final class OverlayTransition implements FragmentTransition, Parcelable
         {
             ClassLoader loader = getClass().getClassLoader();
             MicroFragment<?> microFragment = source.readParcelable(loader);
-            return new OverlayTransition(microFragment);
+            Timestamp timestamp = source.readParcelable(loader);
+            return new OverlayTransition(microFragment, timestamp);
         }
 
 
