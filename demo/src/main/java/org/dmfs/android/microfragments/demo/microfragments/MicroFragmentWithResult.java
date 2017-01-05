@@ -29,6 +29,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.dmfs.android.microfragments.BasicMicroFragmentEnvironment;
+import org.dmfs.android.microfragments.FragmentEnvironment;
 import org.dmfs.android.microfragments.MicroFragment;
 import org.dmfs.android.microfragments.MicroFragmentEnvironment;
 import org.dmfs.android.microfragments.MicroFragmentHost;
@@ -151,7 +152,7 @@ public final class MicroFragmentWithResult implements MicroFragment<Void>
         @Override
         public void onClick(View v)
         {
-            MicroFragmentEnvironment<?> environment = getArguments().getParcelable(MicroFragment.ARG_ENVIRONMENT);
+            MicroFragmentEnvironment<?> environment = new FragmentEnvironment<>(this);
             switch (v.getId())
             {
                 case android.R.id.button1:

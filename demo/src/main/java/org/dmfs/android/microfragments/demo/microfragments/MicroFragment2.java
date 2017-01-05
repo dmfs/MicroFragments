@@ -30,6 +30,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import org.dmfs.android.microfragments.BasicMicroFragmentEnvironment;
+import org.dmfs.android.microfragments.FragmentEnvironment;
 import org.dmfs.android.microfragments.MicroFragment;
 import org.dmfs.android.microfragments.MicroFragmentEnvironment;
 import org.dmfs.android.microfragments.MicroFragmentHost;
@@ -160,7 +161,7 @@ public final class MicroFragment2 implements MicroFragment<MicroFragment2.Step2P
         public void onCreate(@Nullable Bundle savedInstanceState)
         {
             super.onCreate(savedInstanceState);
-            mEnvironment = getArguments().getParcelable(MicroFragment.ARG_ENVIRONMENT);
+            mEnvironment = new FragmentEnvironment<>(this);
         }
 
 

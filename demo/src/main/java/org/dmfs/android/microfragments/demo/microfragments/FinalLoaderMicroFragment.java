@@ -28,8 +28,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.dmfs.android.microfragments.BasicMicroFragmentEnvironment;
+import org.dmfs.android.microfragments.FragmentEnvironment;
 import org.dmfs.android.microfragments.MicroFragment;
-import org.dmfs.android.microfragments.MicroFragmentEnvironment;
 import org.dmfs.android.microfragments.MicroFragmentHost;
 import org.dmfs.android.microfragments.Timestamp;
 import org.dmfs.android.microfragments.UiTimestamp;
@@ -132,9 +132,9 @@ public final class FinalLoaderMicroFragment implements MicroFragment<Void>
 
 
         @Override
-        public void onStart()
+        public void onResume()
         {
-            super.onStart();
+            super.onResume();
             new Loader(mTimestamp).start();
         }
 
@@ -163,8 +163,9 @@ public final class FinalLoaderMicroFragment implements MicroFragment<Void>
 
                 if (isResumed())
                 {
-                    MicroFragmentEnvironment<?> environment = getArguments().getParcelable(MicroFragment.ARG_ENVIRONMENT);
-                    environment.host().execute(getActivity(), new Swiped(new ForwardResetTransition(new LastMicroFragment(), mTimestamp)));
+                    new FragmentEnvironment<>(LoadFragment.this)
+                            .host()
+                            .execute(getActivity(), new Swiped(new ForwardResetTransition(new LastMicroFragment(), mTimestamp)));
                 }
             }
         }

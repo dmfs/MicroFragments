@@ -29,8 +29,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.dmfs.android.microfragments.BasicMicroFragmentEnvironment;
+import org.dmfs.android.microfragments.FragmentEnvironment;
 import org.dmfs.android.microfragments.MicroFragment;
-import org.dmfs.android.microfragments.MicroFragmentEnvironment;
 import org.dmfs.android.microfragments.MicroFragmentHost;
 import org.dmfs.android.microfragments.demo.R;
 import org.dmfs.android.microfragments.transitions.ForwardTransition;
@@ -125,18 +125,18 @@ public final class IntermediateLoaderMicroFragment implements MicroFragment<Void
 
 
         @Override
-        public void onStart()
+        public void onResume()
         {
-            super.onStart();
+            super.onResume();
             mHandler.postDelayed(mFakeLoader, DELAY_WAIT_MESSAGE * 2);
         }
 
 
         @Override
-        public void onStop()
+        public void onPause()
         {
             mHandler.removeCallbacks(mFakeLoader);
-            super.onStop();
+            super.onPause();
         }
 
 
@@ -145,11 +145,12 @@ public final class IntermediateLoaderMicroFragment implements MicroFragment<Void
             @Override
             public void run()
             {
-                if (isAdded() && isResumed())
+                if (isResumed())
                 {
-                    MicroFragmentEnvironment<?> environment = getArguments().getParcelable(MicroFragment.ARG_ENVIRONMENT);
-                    environment.host().execute(getActivity(),
-                            new XFaded(new ForwardTransition(new MicroFragment2("Step2", URI.create("http://example.com")))));
+                    new FragmentEnvironment<>(LoadFragment.this)
+                            .host()
+                            .execute(getActivity(),
+                                    new XFaded(new ForwardTransition(new MicroFragment2("Step2", URI.create("http://example.com")))));
                 }
             }
         };
