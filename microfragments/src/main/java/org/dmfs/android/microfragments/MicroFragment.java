@@ -32,7 +32,7 @@ public interface MicroFragment<T> extends Parcelable
      * The Fragment argument that contains the {@link MicroFragment} that an actual {@link Fragment} belongs to. Every {@link Fragment} that belongs to a {@link
      * MicroFragment} must have this set.
      */
-    String ARG_MICRO_FRAGMENT = "MICRO_FRAGMENT";
+    String ARG_ENVIRONMENT = "MICRO_FRAGMENT_ENVIRONMENT";
 
     /**
      * Returns the title of this {@link MicroFragment}.
@@ -58,11 +58,7 @@ public interface MicroFragment<T> extends Parcelable
     @NonNull
     Fragment fragment(@NonNull Context context, @NonNull MicroFragmentHost host);
 
-    /**
-     * The parameters of this {@link MicroFragment}.
-     *
-     * @return The parameter object.
-     */
+    @NonNull
     T parameters();
 
     /**

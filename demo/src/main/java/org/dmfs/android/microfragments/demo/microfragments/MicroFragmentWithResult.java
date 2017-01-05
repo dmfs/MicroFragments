@@ -20,64 +20,30 @@ package org.dmfs.android.microfragments.demo.microfragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import org.dmfs.android.microfragments.BasicMicroFragmentEnvironment;
 import org.dmfs.android.microfragments.MicroFragment;
 import org.dmfs.android.microfragments.MicroFragmentEnvironment;
 import org.dmfs.android.microfragments.MicroFragmentHost;
 import org.dmfs.android.microfragments.demo.R;
-import org.dmfs.android.microfragments.transitions.BackTransition;
-import org.dmfs.android.microfragments.transitions.Faded;
-import org.dmfs.android.microfragments.transitions.ForwardTransition;
-import org.dmfs.android.microfragments.transitions.OverlayTransition;
-import org.dmfs.android.microfragments.transitions.Swiped;
-
-import java.net.URI;
+import org.dmfs.android.microfragments.transitions.BackWithResultTransition;
 
 
 /**
  * Created by marten on 09.12.16.
  */
-public final class MicroFragment2 implements MicroFragment<MicroFragment2.Step2Params>
+public final class MicroFragmentWithResult implements MicroFragment<Void>
 {
 
-    interface Step2Params
+    public MicroFragmentWithResult()
     {
-        String name();
-
-        URI uri();
-    }
-
-
-    private final Step2Params mParams;
-
-
-    public MicroFragment2(final String name, final URI uri)
-    {
-        mParams = new Step2Params()
-        {
-
-            @Override
-            public String name()
-            {
-                return name;
-            }
-
-
-            @Override
-            public URI uri()
-            {
-                return uri;
-            }
-        };
     }
 
 
@@ -103,9 +69,9 @@ public final class MicroFragment2 implements MicroFragment<MicroFragment2.Step2P
 
     @NonNull
     @Override
-    public Step2Params parameters()
+    public Void parameters()
     {
-        return mParams;
+        return null;
     }
 
 
@@ -126,24 +92,22 @@ public final class MicroFragment2 implements MicroFragment<MicroFragment2.Step2P
     @Override
     public void writeToParcel(Parcel dest, int flags)
     {
-        dest.writeString(mParams.name());
-        dest.writeSerializable(mParams.uri());
     }
 
 
-    public final static Creator<MicroFragment2> CREATOR = new Creator<MicroFragment2>()
+    public final static Creator<MicroFragmentWithResult> CREATOR = new Creator<MicroFragmentWithResult>()
     {
         @Override
-        public MicroFragment2 createFromParcel(Parcel source)
+        public MicroFragmentWithResult createFromParcel(Parcel source)
         {
-            return new MicroFragment2(source.readString(), (URI) source.readSerializable());
+            return new MicroFragmentWithResult();
         }
 
 
         @Override
-        public MicroFragment2[] newArray(int size)
+        public MicroFragmentWithResult[] newArray(int size)
         {
-            return new MicroFragment2[size];
+            return new MicroFragmentWithResult[size];
         }
     };
 
@@ -153,7 +117,7 @@ public final class MicroFragment2 implements MicroFragment<MicroFragment2.Step2P
      */
     public static class Step2Fragment extends Fragment implements View.OnClickListener
     {
-        private MicroFragmentEnvironment<Step2Params> mEnvironment;
+        private MicroFragmentEnvironment<Void> mEnvironment;
 
 
         @Override
@@ -169,27 +133,18 @@ public final class MicroFragment2 implements MicroFragment<MicroFragment2.Step2P
                                  Bundle savedInstanceState)
         {
             // Inflate the layout for this fragment
-            View view = inflater.inflate(R.layout.fragment_step2, container, false);
-            ((TextView) view.findViewById(R.id.text)).setText(
-                    mEnvironment.microFragment().parameters().name() + " " + mEnvironment.microFragment().parameters().uri().toASCIIString());
+            View view = inflater.inflate(R.layout.fragment_with_result, container, false);
 
             view.findViewById(android.R.id.button1).setOnClickListener(this);
             view.findViewById(android.R.id.button2).setOnClickListener(this);
-            view.findViewById(android.R.id.button3).setOnClickListener(this);
             return view;
         }
 
 
         @Override
-        public void onResume()
+        public void onStart()
         {
-            mEnvironment = getArguments().getParcelable(MicroFragment.ARG_ENVIRONMENT);
-            super.onResume();
-            MicroFragmentWithResult.ResultType result = (MicroFragmentWithResult.ResultType) mEnvironment.result();
-            if (result != null)
-            {
-                Snackbar.make(getView(), String.format("Result was %s", result.toString()), Snackbar.LENGTH_LONG).show();
-            }
+            super.onStart();
         }
 
 
@@ -200,16 +155,62 @@ public final class MicroFragment2 implements MicroFragment<MicroFragment2.Step2P
             switch (v.getId())
             {
                 case android.R.id.button1:
-                    environment.host().execute(getActivity(), new BackTransition());
+                    environment.host().execute(getActivity(), new BackWithResultTransition(new ResultType("RESULT1")));
                     break;
                 case android.R.id.button2:
-                    environment.host().execute(getActivity(), new Swiped(new ForwardTransition(new FinalLoaderMicroFragment())));
-                    break;
-                case android.R.id.button3:
-                    environment.host().execute(getActivity(), new Faded(new OverlayTransition(new MicroFragmentWithResult())));
+                    environment.host().execute(getActivity(), new BackWithResultTransition(new ResultType("result2")));
                     break;
             }
         }
+    }
 
+
+    public final static class ResultType implements Parcelable
+    {
+        private final String mValue;
+
+
+        public ResultType(String value)
+        {
+            mValue = value;
+        }
+
+
+        @Override
+        public int describeContents()
+        {
+            return 0;
+        }
+
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags)
+        {
+            dest.writeString(mValue);
+        }
+
+
+        @Override
+        public String toString()
+        {
+            return mValue;
+        }
+
+
+        public final static Creator<ResultType> CREATOR = new Creator<ResultType>()
+        {
+            @Override
+            public ResultType createFromParcel(Parcel source)
+            {
+                return new ResultType(source.readString());
+            }
+
+
+            @Override
+            public ResultType[] newArray(int size)
+            {
+                return new ResultType[size];
+            }
+        };
     }
 }

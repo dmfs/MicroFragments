@@ -33,8 +33,6 @@ public final class MicroFragmentsDemoActivity extends AppCompatActivity implemen
 {
     private Dovecote<MicroFragmentState> mDovecote;
 
-    private boolean mLeaveOnBack = true;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -65,7 +63,6 @@ public final class MicroFragmentsDemoActivity extends AppCompatActivity implemen
     public void onPigeonReturn(@NonNull MicroFragmentState payload)
     {
         getSupportActionBar().setTitle(payload.currentStep().title(this));
-        mLeaveOnBack = payload.backStackSize() == 0;
     }
 
 }

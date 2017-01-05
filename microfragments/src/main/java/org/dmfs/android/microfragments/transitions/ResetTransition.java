@@ -32,11 +32,11 @@ import org.dmfs.android.microfragments.UiTimestamp;
 
 
 /**
- * A {@link FragmentTransition} that clears the back stack and starts over with a new {@link MicroFragment}.
+ * A {@link FragmentTransition} that clears the back stack and starts over with a new {@link MicroFragment} using a "back" animation.
  *
  * @author Marten Gajda
  */
-public final class ResetFragmentTransition implements FragmentTransition, Parcelable
+public final class ResetTransition implements FragmentTransition, Parcelable
 {
     private final MicroFragment mNextStep;
     private final Timestamp mTimestamp;
@@ -48,7 +48,7 @@ public final class ResetFragmentTransition implements FragmentTransition, Parcel
      * @param nextStep
      *         The initial {@link MicroFragment}.
      */
-    public ResetFragmentTransition(@NonNull MicroFragment nextStep)
+    public ResetTransition(@NonNull MicroFragment nextStep)
     {
         this(nextStep, new UiTimestamp());
     }
@@ -60,7 +60,7 @@ public final class ResetFragmentTransition implements FragmentTransition, Parcel
      * @param nextStep
      *         The initial {@link MicroFragment}.
      */
-    public ResetFragmentTransition(@NonNull MicroFragment nextStep, Timestamp timestamp)
+    public ResetTransition(@NonNull MicroFragment nextStep, Timestamp timestamp)
     {
         mNextStep = nextStep;
         mTimestamp = timestamp;
@@ -77,11 +77,7 @@ public final class ResetFragmentTransition implements FragmentTransition, Parcel
     @Override
     public void prepare(@NonNull Context context, @NonNull FragmentManager fragmentManager, @NonNull MicroFragmentHost host, @NonNull MicroFragment previousStep)
     {
-        // remove everything from the backstack
-        while (fragmentManager.popBackStackImmediate())
-        {
-            // nothing else to be done
-        }
+        fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
     }
 
 
@@ -114,22 +110,22 @@ public final class ResetFragmentTransition implements FragmentTransition, Parcel
     }
 
 
-    public final static Parcelable.Creator<ResetFragmentTransition> CREATOR = new Parcelable.Creator<ResetFragmentTransition>()
+    public final static Parcelable.Creator<ResetTransition> CREATOR = new Parcelable.Creator<ResetTransition>()
     {
         @Override
-        public ResetFragmentTransition createFromParcel(Parcel source)
+        public ResetTransition createFromParcel(Parcel source)
         {
             ClassLoader loader = getClass().getClassLoader();
             MicroFragment<?> microFragment = source.readParcelable(loader);
             Timestamp timestamp = source.readParcelable(loader);
-            return new ResetFragmentTransition(microFragment, timestamp);
+            return new ResetTransition(microFragment, timestamp);
         }
 
 
         @Override
-        public ResetFragmentTransition[] newArray(int size)
+        public ResetTransition[] newArray(int size)
         {
-            return new ResetFragmentTransition[size];
+            return new ResetTransition[size];
         }
     };
 }

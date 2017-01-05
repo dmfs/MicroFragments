@@ -29,12 +29,19 @@ import org.dmfs.android.microfragments.Timestamp;
 
 
 /**
- * Represents an operation that switches from one WizardStep to another one.
+ * Represents an operation that switches from one {@link MicroFragment} to another one.
  *
  * @author Marten Gajda
  */
 public interface FragmentTransition extends Parcelable
 {
+    /**
+     * The {@link Timestamp} of the origin of this {@link FragmentTransition}.
+     * <p>
+     * For background processes this is usually the time of when the background process has been started.
+     *
+     * @return
+     */
     Timestamp timestamp();
 
     void prepare(@NonNull Context context, @NonNull FragmentManager fragmentManager, @NonNull MicroFragmentHost host, @NonNull MicroFragment previousStep);

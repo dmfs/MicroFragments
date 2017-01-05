@@ -26,6 +26,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.dmfs.android.microfragments.BasicMicroFragmentEnvironment;
 import org.dmfs.android.microfragments.MicroFragmentHost;
 import org.dmfs.android.microfragments.demo.R;
 
@@ -48,8 +49,7 @@ public final class LastMicroFragment implements org.dmfs.android.microfragments.
     {
         Fragment fragment = new Step1Fragment();
         Bundle args = new Bundle();
-        args.putParcelable(ARG_MICRO_FRAGMENT, this);
-        args.putParcelable("host", host);
+        args.putParcelable(ARG_ENVIRONMENT, new BasicMicroFragmentEnvironment<>(this, host));
         fragment.setArguments(args);
         return fragment;
     }

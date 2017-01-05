@@ -27,11 +27,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.dmfs.android.microfragments.BasicMicroFragmentEnvironment;
 import org.dmfs.android.microfragments.MicroFragment;
+import org.dmfs.android.microfragments.MicroFragmentEnvironment;
 import org.dmfs.android.microfragments.MicroFragmentHost;
 import org.dmfs.android.microfragments.UiTimestamp;
 import org.dmfs.android.microfragments.demo.R;
-import org.dmfs.android.microfragments.transitions.ResetFragmentTransition;
+import org.dmfs.android.microfragments.transitions.ForwardResetTransition;
+import org.dmfs.android.microfragments.transitions.Swiped;
 
 
 /**
@@ -52,8 +55,7 @@ public final class FinalLoaderMicroFragment implements MicroFragment<Void>
     {
         Fragment fragment = new LoadFragment();
         Bundle args = new Bundle();
-        args.putParcelable(ARG_MICRO_FRAGMENT, this);
-        args.putParcelable("host", host);
+        args.putParcelable(ARG_ENVIRONMENT, new BasicMicroFragmentEnvironment<>(this, host));
         fragment.setArguments(args);
         return fragment;
     }
@@ -134,7 +136,7 @@ public final class FinalLoaderMicroFragment implements MicroFragment<Void>
             super.onStart();
             new Loader(mTimestamp).start();
         }
-        
+
 
         private final class Loader extends Thread
         {
@@ -152,7 +154,7 @@ public final class FinalLoaderMicroFragment implements MicroFragment<Void>
             {
                 try
                 {
-                    sleep(DELAY_WAIT_MESSAGE);
+                    sleep(DELAY_WAIT_MESSAGE * 3 / 2);
                 }
                 catch (InterruptedException e)
                 {
@@ -160,8 +162,8 @@ public final class FinalLoaderMicroFragment implements MicroFragment<Void>
 
                 if (isResumed())
                 {
-                    MicroFragmentHost host = getArguments().getParcelable("host");
-                    host.execute(getActivity(), new ResetFragmentTransition(new LastMicroFragment(), mTimestamp));
+                    MicroFragmentEnvironment<?> environment = getArguments().getParcelable(MicroFragment.ARG_ENVIRONMENT);
+                    environment.host().execute(getActivity(), new Swiped(new ForwardResetTransition(new LastMicroFragment(), mTimestamp)));
                 }
             }
         }

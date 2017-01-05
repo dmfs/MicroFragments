@@ -31,7 +31,7 @@ import org.dmfs.android.microfragments.UiTimestamp;
 
 
 /**
- * A {@link FragmentTransition} that returns to the previous {@link MicroFragment}.
+ * A {@link FragmentTransition} that returns to the previous {@link MicroFragment} on the backstack.
  *
  * @author Marten Gajda
  */

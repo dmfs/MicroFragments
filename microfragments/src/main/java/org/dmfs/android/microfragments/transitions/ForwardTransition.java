@@ -32,7 +32,7 @@ import org.dmfs.android.microfragments.UiTimestamp;
 
 
 /**
- * A {@link FragmentTransition} that moves on to the next {@link MicroFragment}.
+ * A {@link FragmentTransition} that moves on to the next {@link MicroFragment} in a forward transition.
  *
  * @author Marten Gajda
  */
@@ -87,7 +87,7 @@ public final class ForwardTransition implements FragmentTransition, Parcelable
         fragmentTransaction.replace(R.id.microfragments_host, mNextStep.fragment(context, host));
         if (fragmentManager.getBackStackEntryCount() > 0 || !previousStep.skipOnBack())
         {
-            fragmentTransaction.addToBackStack(mNextStep.skipOnBack() ? "skip" : null);
+            fragmentTransaction.addToBackStack(mNextStep.skipOnBack() ? "skip" : "noskip");
         }
         return fragmentTransaction;
     }

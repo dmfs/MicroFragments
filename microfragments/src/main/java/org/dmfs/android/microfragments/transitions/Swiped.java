@@ -29,6 +29,9 @@ import org.dmfs.android.microfragments.Timestamp;
 
 
 /**
+ * A decorator for {@link ForwardTransition}s and {@link OverlayTransition}s. It adds an animation to the transition that swipes the old fragment out and the
+ * new one in.
+ *
  * @author Marten Gajda
  */
 public final class Swiped implements FragmentTransition
@@ -52,7 +55,7 @@ public final class Swiped implements FragmentTransition
     @Override
     public void prepare(@NonNull Context context, @NonNull FragmentManager fragmentManager, @NonNull MicroFragmentHost host, @NonNull MicroFragment previousStep)
     {
-        // nothing to be done
+        mDelegate.prepare(context, fragmentManager, host, previousStep);
     }
 
 
@@ -68,7 +71,7 @@ public final class Swiped implements FragmentTransition
     @Override
     public void cleanup(@NonNull Context context, @NonNull FragmentManager fragmentManager, @NonNull MicroFragmentHost host, @NonNull MicroFragment previousStep)
     {
-        // nothing to be done
+        mDelegate.cleanup(context, fragmentManager, host, previousStep);
     }
 
 

@@ -18,20 +18,25 @@
 package org.dmfs.android.microfragments.transitions;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
 import org.dmfs.android.microfragments.MicroFragment;
+import org.dmfs.android.microfragments.MicroFragmentEnvironment;
 import org.dmfs.android.microfragments.MicroFragmentHost;
+import org.dmfs.android.microfragments.R;
 import org.dmfs.android.microfragments.Timestamp;
 import org.dmfs.android.microfragments.UiTimestamp;
+import org.dmfs.android.microfragments.WithResult;
 
 
 /**
- * A {@link FragmentTransition} that returns to the previous {@link MicroFragment}.
+ * A {@link FragmentTransition} that returns to the previous {@link MicroFragment} but also provides a result to it.
  *
  * @author Marten Gajda
  */
@@ -87,7 +92,14 @@ public final class BackWithResultTransition implements FragmentTransition
     @Override
     public void cleanup(@NonNull Context context, @NonNull FragmentManager fragmentManager, @NonNull MicroFragmentHost host, @NonNull MicroFragment previousStep)
     {
-        // TODO: send the result to the current fragment
+        // update Fragment arguments with the new environment
+        Fragment fragment = fragmentManager.findFragmentById(R.id.microfragments_host);
+        Bundle args = fragment.getArguments();
+        // wow, what a hack! Since we can't call setArguments we just modify the arguments the Fragment already has. Can't believe that even works, but it seems to be the only solution.
+        args.putParcelable(MicroFragment.ARG_ENVIRONMENT,
+                new WithResult((MicroFragmentEnvironment) args.getParcelable(MicroFragment.ARG_ENVIRONMENT), mResult));
+        // TODO: calling onResume is not acceptable
+        fragment.onResume();
     }
 
 

@@ -43,14 +43,14 @@ public final class SimpleMicroFragmentFlow implements MicroFragmentFlow
     /**
      * Create a simple {@link MicroFragmentFlow} with the given initial {@link MicroFragment} in the view having the given hostId.
      *
-     * @param initialStep
+     * @param microFragment
      *         The {@link MicroFragment} to begin with.
      * @param containerId
      *         The container view holding the {@link MicroFragmentFlow}
      */
-    public SimpleMicroFragmentFlow(@NonNull MicroFragment initialStep, @IdRes int containerId)
+    public SimpleMicroFragmentFlow(@NonNull MicroFragment microFragment, @IdRes int containerId)
     {
-        this(arguments(initialStep), containerId);
+        this(arguments(microFragment), containerId);
     }
 
 
@@ -86,10 +86,10 @@ public final class SimpleMicroFragmentFlow implements MicroFragmentFlow
     }
 
 
-    private static Bundle arguments(@NonNull MicroFragment initialStep)
+    private static Bundle arguments(@NonNull MicroFragment microFragment)
     {
         Bundle args = new Bundle(1);
-        args.putParcelable(MicroFragment.ARG_MICRO_FRAGMENT, initialStep);
+        args.putParcelable("INITIAL_MICRO_FRAGMENT", microFragment);
         return args;
     }
 }

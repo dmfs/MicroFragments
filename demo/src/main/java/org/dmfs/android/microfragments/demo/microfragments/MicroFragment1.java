@@ -28,7 +28,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.dmfs.android.microfragments.BasicMicroFragmentEnvironment;
 import org.dmfs.android.microfragments.MicroFragment;
+import org.dmfs.android.microfragments.MicroFragmentEnvironment;
 import org.dmfs.android.microfragments.MicroFragmentHost;
 import org.dmfs.android.microfragments.demo.R;
 import org.dmfs.android.microfragments.transitions.ForwardTransition;
@@ -62,8 +64,7 @@ public final class MicroFragment1 implements MicroFragment<String>
     {
         Fragment fragment = new Step1Fragment();
         Bundle args = new Bundle();
-        args.putParcelable(ARG_MICRO_FRAGMENT, this);
-        args.putParcelable("host", host);
+        args.putParcelable(ARG_ENVIRONMENT, new BasicMicroFragmentEnvironment<>(this, host));
         fragment.setArguments(args);
         return fragment;
     }
@@ -120,14 +121,14 @@ public final class MicroFragment1 implements MicroFragment<String>
     public static class Step1Fragment extends Fragment implements View.OnClickListener
     {
 
-        private MicroFragment<String> mMicroFragment;
+        private MicroFragmentEnvironment<String> mEnvironment;
 
 
         @Override
         public void onCreate(@Nullable Bundle savedInstanceState)
         {
             super.onCreate(savedInstanceState);
-            mMicroFragment = getArguments().getParcelable(MicroFragment.ARG_MICRO_FRAGMENT);
+            mEnvironment = getArguments().getParcelable(MicroFragment.ARG_ENVIRONMENT);
         }
 
 
@@ -138,7 +139,7 @@ public final class MicroFragment1 implements MicroFragment<String>
             // Inflate the layout for this fragment
             View view = inflater.inflate(R.layout.fragment_step1, container, false);
 
-            ((TextView) view.findViewById(R.id.text)).setText(getActivity().getString(R.string.hello_fragment, mMicroFragment.parameters()));
+            ((TextView) view.findViewById(R.id.text)).setText(getActivity().getString(R.string.hello_fragment, mEnvironment.microFragment().parameters()));
             view.findViewById(android.R.id.button1).setOnClickListener(this);
             return view;
         }
@@ -147,8 +148,8 @@ public final class MicroFragment1 implements MicroFragment<String>
         @Override
         public void onClick(View v)
         {
-            MicroFragmentHost host = getArguments().getParcelable("host");
-            host.execute(getActivity(), new Swiped(new ForwardTransition(new IntermediateLoaderMicroFragment())));
+            MicroFragmentEnvironment<?> environment = getArguments().getParcelable(MicroFragment.ARG_ENVIRONMENT);
+            environment.host().execute(getActivity(), new Swiped(new ForwardTransition(new IntermediateLoaderMicroFragment())));
         }
     }
 

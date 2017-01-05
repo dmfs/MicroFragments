@@ -84,7 +84,7 @@ public final class HostFragment extends Fragment implements FragmentManager.OnBa
         {
             mFragmentManager.beginTransaction()
                     .add(R.id.microfragments_host,
-                            ((MicroFragment) getArguments().getParcelable(MicroFragment.ARG_MICRO_FRAGMENT)).fragment(getActivity(),
+                            ((MicroFragment<?>) getArguments().getParcelable("INITIAL_MICRO_FRAGMENT")).fragment(getActivity(),
                                     new BasicMicroFragmentHost(mOperationDoveCote.cage())))
                     .commit();
         }
@@ -92,9 +92,9 @@ public final class HostFragment extends Fragment implements FragmentManager.OnBa
         {
             mBackStackDepth = mFragmentManager.getBackStackEntryCount();
             postUpdate(
-                    (MicroFragment) currentFragment()
+                    ((MicroFragmentEnvironment<?>) currentFragment()
                             .getArguments()
-                            .getParcelable(MicroFragment.ARG_MICRO_FRAGMENT));
+                            .getParcelable(MicroFragment.ARG_ENVIRONMENT)).microFragment());
             //        currentFragment().onStart();
         }
         super.onStart();
@@ -132,7 +132,7 @@ public final class HostFragment extends Fragment implements FragmentManager.OnBa
         mBackStackDepth = mFragmentManager.getBackStackEntryCount();
 
         postUpdate(
-                (MicroFragment) currentFragment().getArguments().getParcelable(MicroFragment.ARG_MICRO_FRAGMENT));
+                ((MicroFragmentEnvironment<?>) currentFragment().getArguments().getParcelable(MicroFragment.ARG_ENVIRONMENT)).microFragment());
     }
 
 
@@ -166,9 +166,9 @@ public final class HostFragment extends Fragment implements FragmentManager.OnBa
         }
         mLastTransactionTimestamp = fragmentTransition.timestamp();
 
-        MicroFragment microFragment = mFragmentManager.findFragmentById(R.id.microfragments_host)
+        MicroFragment microFragment = ((MicroFragmentEnvironment<?>) mFragmentManager.findFragmentById(R.id.microfragments_host)
                 .getArguments()
-                .getParcelable(MicroFragment.ARG_MICRO_FRAGMENT);
+                .getParcelable(MicroFragment.ARG_ENVIRONMENT)).microFragment();
         MicroFragmentHost host = new BasicMicroFragmentHost(mOperationDoveCote.cage());
         fragmentTransition.prepare(getActivity(), mFragmentManager, host, microFragment);
         FragmentTransaction fragmentTransaction = fragmentTransition.updateTransaction(getActivity(), mFragmentManager.beginTransaction(),
@@ -179,6 +179,9 @@ public final class HostFragment extends Fragment implements FragmentManager.OnBa
         }
         mFragmentManager.executePendingTransactions();
         fragmentTransition.cleanup(getActivity(), mFragmentManager, host, microFragment);
+
+        // post an update, in case the backstack has not been changed by the transition we still have to notify the listener
+        postUpdate(((MicroFragmentEnvironment<?>) currentFragment().getArguments().getParcelable(MicroFragment.ARG_ENVIRONMENT)).microFragment());
 
         // close keyboard if necessary
         View view = getActivity().getCurrentFocus();

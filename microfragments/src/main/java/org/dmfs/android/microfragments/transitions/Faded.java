@@ -29,6 +29,9 @@ import org.dmfs.android.microfragments.Timestamp;
 
 
 /**
+ * A decorator for {@link ForwardTransition}s and {@link OverlayTransition}s. It adds an animation to the transition that fades the old fragment out to reveal
+ * the new one.
+ *
  * @author Marten Gajda
  */
 public final class Faded implements FragmentTransition
@@ -52,15 +55,15 @@ public final class Faded implements FragmentTransition
     @Override
     public void prepare(@NonNull Context context, @NonNull FragmentManager fragmentManager, @NonNull MicroFragmentHost host, @NonNull MicroFragment previousStep)
     {
-        // nothing to be done
+        mDelegate.prepare(context, fragmentManager, host, previousStep);
     }
 
 
     @Override
     public FragmentTransaction updateTransaction(@NonNull Context context, @NonNull FragmentTransaction fragmentTransaction, FragmentManager fragmentManager, @NonNull MicroFragmentHost host, @NonNull MicroFragment previousStep)
     {
-        fragmentTransaction.setCustomAnimations(R.anim.microfragments_none, R.anim.microfragments_fade_exit, R.anim.microfragments_fade_enter,
-                R.anim.microfragments_none);
+        fragmentTransaction.setCustomAnimations(R.anim.microfragments_fade_enter, R.anim.microfragments_fade_exit, R.anim.microfragments_fade_enter,
+                R.anim.microfragments_fade_exit);
         return mDelegate.updateTransaction(context, fragmentTransaction, fragmentManager, host, previousStep);
     }
 
@@ -68,7 +71,7 @@ public final class Faded implements FragmentTransition
     @Override
     public void cleanup(@NonNull Context context, @NonNull FragmentManager fragmentManager, @NonNull MicroFragmentHost host, @NonNull MicroFragment previousStep)
     {
-        // nothing to be done
+        mDelegate.cleanup(context, fragmentManager, host, previousStep);
     }
 
 

@@ -28,7 +28,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.dmfs.android.microfragments.BasicMicroFragmentEnvironment;
 import org.dmfs.android.microfragments.MicroFragment;
+import org.dmfs.android.microfragments.MicroFragmentEnvironment;
 import org.dmfs.android.microfragments.MicroFragmentHost;
 import org.dmfs.android.microfragments.demo.R;
 import org.dmfs.android.microfragments.transitions.ForwardTransition;
@@ -55,8 +57,7 @@ public final class IntermediateLoaderMicroFragment implements MicroFragment<Void
     {
         Fragment fragment = new LoadFragment();
         Bundle args = new Bundle();
-        args.putParcelable(ARG_MICRO_FRAGMENT, this);
-        args.putParcelable("host", host);
+        args.putParcelable(ARG_ENVIRONMENT, new BasicMicroFragmentEnvironment<>(this, host));
         fragment.setArguments(args);
         return fragment;
     }
@@ -146,8 +147,8 @@ public final class IntermediateLoaderMicroFragment implements MicroFragment<Void
             {
                 if (isAdded() && isResumed())
                 {
-                    MicroFragmentHost host = getArguments().getParcelable("host");
-                    host.execute(getActivity(),
+                    MicroFragmentEnvironment<?> environment = getArguments().getParcelable(MicroFragment.ARG_ENVIRONMENT);
+                    environment.host().execute(getActivity(),
                             new XFaded(new ForwardTransition(new MicroFragment2("Step2", URI.create("http://example.com")))));
                 }
             }
