@@ -20,6 +20,7 @@ package org.dmfs.android.microfragments.transitions;
 import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -51,6 +52,7 @@ public final class ForwardResetTransition implements FragmentTransition, Parcela
      * @param nextStep
      *         The initial {@link MicroFragment}.
      */
+    @MainThread
     public ForwardResetTransition(@NonNull MicroFragment nextStep)
     {
         this(nextStep, new UiTimestamp());

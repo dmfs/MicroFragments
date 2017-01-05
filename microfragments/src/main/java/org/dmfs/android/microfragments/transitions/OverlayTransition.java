@@ -20,6 +20,7 @@ package org.dmfs.android.microfragments.transitions;
 import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -48,6 +49,7 @@ public final class OverlayTransition implements FragmentTransition, Parcelable
      * @param nextStep
      *         The next {@link MicroFragment}.
      */
+    @MainThread
     public OverlayTransition(@NonNull MicroFragment nextStep)
     {
         this(nextStep, new UiTimestamp());

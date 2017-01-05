@@ -20,6 +20,7 @@ package org.dmfs.android.microfragments.transitions;
 import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -44,6 +45,7 @@ public final class BackTransition implements FragmentTransition
     /**
      * Creates a {@link FragmentTransition} that goes back to the previous {@link MicroFragment}.
      */
+    @MainThread
     public BackTransition()
     {
         this(new UiTimestamp());

@@ -19,6 +19,7 @@ package org.dmfs.android.microfragments;
 import android.os.Looper;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.MainThread;
 
 
 /**
@@ -31,6 +32,7 @@ public final class UiTimestamp implements Timestamp, Parcelable
     private final long mTimestamp;
 
 
+    @MainThread
     public UiTimestamp()
     {
         this(System.nanoTime());

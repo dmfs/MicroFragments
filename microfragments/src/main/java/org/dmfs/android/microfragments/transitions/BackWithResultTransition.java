@@ -21,6 +21,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -51,6 +52,7 @@ public final class BackWithResultTransition implements FragmentTransition
     /**
      * Creates a {@link FragmentTransition} that goes back to the previous {@link MicroFragment}.
      */
+    @MainThread
     public BackWithResultTransition(Parcelable result)
     {
         this(result, new UiTimestamp());
