@@ -24,7 +24,7 @@ import android.os.Parcelable;
  */
 public interface Timestamp extends Parcelable
 {
-    long millis();
+    long nanoseconds();
 
     boolean isAfter(Timestamp other);
 }

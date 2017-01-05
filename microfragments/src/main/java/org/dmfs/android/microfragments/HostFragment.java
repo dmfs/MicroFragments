@@ -24,7 +24,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -161,7 +160,6 @@ public final class HostFragment extends Fragment implements FragmentManager.OnBa
         if (!fragmentTransition.timestamp().isAfter(mLastTransactionTimestamp))
         {
             // ignore outdated transition
-            Log.i("HostFragment", "outdated transition ignored");
             return;
         }
         mLastTransactionTimestamp = fragmentTransition.timestamp();

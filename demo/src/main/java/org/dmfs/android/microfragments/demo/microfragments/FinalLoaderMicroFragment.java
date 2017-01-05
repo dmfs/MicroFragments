@@ -31,6 +31,7 @@ import org.dmfs.android.microfragments.BasicMicroFragmentEnvironment;
 import org.dmfs.android.microfragments.MicroFragment;
 import org.dmfs.android.microfragments.MicroFragmentEnvironment;
 import org.dmfs.android.microfragments.MicroFragmentHost;
+import org.dmfs.android.microfragments.Timestamp;
 import org.dmfs.android.microfragments.UiTimestamp;
 import org.dmfs.android.microfragments.demo.R;
 import org.dmfs.android.microfragments.transitions.ForwardResetTransition;
@@ -109,7 +110,7 @@ public final class FinalLoaderMicroFragment implements MicroFragment<Void>
     public static class LoadFragment extends Fragment
     {
         private final static int DELAY_WAIT_MESSAGE = 2500;
-        private UiTimestamp mTimestamp;
+        private Timestamp mTimestamp;
 
 
         @Override
@@ -140,10 +141,10 @@ public final class FinalLoaderMicroFragment implements MicroFragment<Void>
 
         private final class Loader extends Thread
         {
-            private final UiTimestamp mTimestamp;
+            private final Timestamp mTimestamp;
 
 
-            private Loader(UiTimestamp timestamp)
+            private Loader(Timestamp timestamp)
             {
                 mTimestamp = timestamp;
             }

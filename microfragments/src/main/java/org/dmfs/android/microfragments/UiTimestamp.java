@@ -33,7 +33,7 @@ public final class UiTimestamp implements Timestamp, Parcelable
 
     public UiTimestamp()
     {
-        this(System.nanoTime() / 1000000 /* convert to millis */);
+        this(System.nanoTime());
         if (Looper.getMainLooper() != Looper.myLooper())
         {
             throw new IllegalStateException("UiTimestamp must be created on the main thread.");
@@ -48,7 +48,7 @@ public final class UiTimestamp implements Timestamp, Parcelable
 
 
     @Override
-    public long millis()
+    public long nanoseconds()
     {
         return mTimestamp;
     }
@@ -57,7 +57,7 @@ public final class UiTimestamp implements Timestamp, Parcelable
     @Override
     public boolean isAfter(Timestamp other)
     {
-        return mTimestamp > other.millis();
+        return mTimestamp > other.nanoseconds();
     }
 
 
@@ -90,4 +90,22 @@ public final class UiTimestamp implements Timestamp, Parcelable
             return new UiTimestamp[size];
         }
     };
+
+
+    @Override
+    public int hashCode()
+    {
+        return (int) mTimestamp;
+    }
+
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (!(o instanceof Timestamp))
+        {
+            return false;
+        }
+        return mTimestamp == ((Timestamp) o).nanoseconds();
+    }
 }
