@@ -62,8 +62,8 @@ public final class Faded implements FragmentTransition
     @Override
     public FragmentTransaction updateTransaction(@NonNull Context context, @NonNull FragmentTransaction fragmentTransaction, FragmentManager fragmentManager, @NonNull MicroFragmentHost host, @NonNull MicroFragment previousStep)
     {
-        fragmentTransaction.setCustomAnimations(R.anim.microfragments_fade_enter, R.anim.microfragments_fade_exit, R.anim.microfragments_fade_enter,
-                R.anim.microfragments_fade_exit);
+        fragmentTransaction.setCustomAnimations(R.anim.microfragments_none, R.anim.microfragments_fade_exit, R.anim.microfragments_swipe_return,
+                R.anim.microfragments_swipe_back);
         return mDelegate.updateTransaction(context, fragmentTransaction, fragmentManager, host, previousStep);
     }
 
