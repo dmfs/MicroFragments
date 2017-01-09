@@ -18,6 +18,7 @@ package org.dmfs.android.microfragments;
 
 import android.content.Context;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 import org.dmfs.android.microfragments.transitions.FragmentTransition;
 
@@ -27,5 +28,5 @@ import org.dmfs.android.microfragments.transitions.FragmentTransition;
  */
 public interface MicroFragmentHost extends Parcelable
 {
-    void execute(Context context, FragmentTransition fragmentTransition);
+    void execute(@NonNull Context context, @NonNull FragmentTransition fragmentTransition);
 }

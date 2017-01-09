@@ -48,5 +48,6 @@ public interface MicroFragmentFlow
      *
      * @param fragmentActivity
      */
+    @NonNull
     MicroFragmentHost start(@NonNull FragmentActivity fragmentActivity);
 }

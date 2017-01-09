@@ -71,7 +71,7 @@ public final class HostFragment extends Fragment implements FragmentManager.OnBa
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
         View result = new FrameLayout(inflater.getContext());
         result.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
@@ -145,7 +145,7 @@ public final class HostFragment extends Fragment implements FragmentManager.OnBa
     }
 
 
-    private void postUpdate(MicroFragment currentStep)
+    private void postUpdate(@NonNull MicroFragment currentStep)
     {
         Cage<MicroFragmentState> cage = getArguments().getParcelable("cage");
         if (cage == null || !isResumed())
@@ -172,7 +172,7 @@ public final class HostFragment extends Fragment implements FragmentManager.OnBa
     }
 
 
-    private void executeTransition(FragmentTransition fragmentTransition)
+    private void executeTransition(@NonNull FragmentTransition fragmentTransition)
     {
 
         if (!fragmentTransition.timestamp().isAfter(mLastTransactionTimestamp))

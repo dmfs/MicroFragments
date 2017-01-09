@@ -71,6 +71,7 @@ public final class SimpleMicroFragmentFlow implements MicroFragmentFlow
     }
 
 
+    @NonNull
     @Override
     public MicroFragmentHost start(@NonNull FragmentActivity fragmentActivity)
     {
@@ -86,6 +87,7 @@ public final class SimpleMicroFragmentFlow implements MicroFragmentFlow
     }
 
 
+    @NonNull
     private static Bundle arguments(@NonNull MicroFragment microFragment)
     {
         Bundle args = new Bundle(1);

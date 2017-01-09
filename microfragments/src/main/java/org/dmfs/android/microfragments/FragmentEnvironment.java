@@ -19,6 +19,8 @@ package org.dmfs.android.microfragments;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
 
@@ -32,18 +34,19 @@ public final class FragmentEnvironment<T> implements MicroFragmentEnvironment<T>
     private final Bundle mArguments;
 
 
-    public FragmentEnvironment(Fragment fragment)
+    public FragmentEnvironment(@NonNull Fragment fragment)
     {
         this(fragment.getArguments());
     }
 
 
-    public FragmentEnvironment(Bundle arguments)
+    public FragmentEnvironment(@NonNull Bundle arguments)
     {
         mArguments = arguments;
     }
 
 
+    @NonNull
     @Override
     public MicroFragment<T> microFragment()
     {
@@ -51,6 +54,7 @@ public final class FragmentEnvironment<T> implements MicroFragmentEnvironment<T>
     }
 
 
+    @NonNull
     @Override
     public MicroFragmentHost host()
     {
@@ -58,12 +62,14 @@ public final class FragmentEnvironment<T> implements MicroFragmentEnvironment<T>
     }
 
 
+    @NonNull
     private MicroFragmentEnvironment<T> delegate()
     {
         return mArguments.getParcelable(MicroFragment.ARG_ENVIRONMENT);
     }
 
 
+    @Nullable
     @Override
     public Parcelable result()
     {

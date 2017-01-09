@@ -39,12 +39,13 @@ public final class Swiped implements FragmentTransition
     private final FragmentTransition mDelegate;
 
 
-    public Swiped(FragmentTransition delegate)
+    public Swiped(@NonNull FragmentTransition delegate)
     {
         mDelegate = delegate;
     }
 
 
+    @NonNull
     @Override
     public Timestamp timestamp()
     {
@@ -58,9 +59,9 @@ public final class Swiped implements FragmentTransition
         mDelegate.prepare(context, fragmentManager, host, previousStep);
     }
 
-
+    @NonNull
     @Override
-    public FragmentTransaction updateTransaction(@NonNull Context context, @NonNull FragmentTransaction fragmentTransaction, FragmentManager fragmentManager, @NonNull MicroFragmentHost host, @NonNull MicroFragment previousStep)
+    public FragmentTransaction updateTransaction(@NonNull Context context, @NonNull FragmentTransaction fragmentTransaction, @NonNull FragmentManager fragmentManager, @NonNull MicroFragmentHost host, @NonNull MicroFragment previousStep)
     {
         fragmentTransaction.setCustomAnimations(R.anim.microfragments_swipe_enter, R.anim.microfragments_swipe_exit, R.anim.microfragments_swipe_return,
                 R.anim.microfragments_swipe_back);

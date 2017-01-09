@@ -60,6 +60,7 @@ public final class UpTransition implements FragmentTransition, Parcelable
     }
 
 
+    @NonNull
     @Override
     public Timestamp timestamp()
     {
@@ -74,8 +75,9 @@ public final class UpTransition implements FragmentTransition, Parcelable
     }
 
 
+    @NonNull
     @Override
-    public FragmentTransaction updateTransaction(@NonNull Context context, @NonNull FragmentTransaction fragmentTransaction, FragmentManager fragmentManager, @NonNull MicroFragmentHost host, @NonNull MicroFragment previousStep)
+    public FragmentTransaction updateTransaction(@NonNull Context context, @NonNull FragmentTransaction fragmentTransaction, @NonNull FragmentManager fragmentManager, @NonNull MicroFragmentHost host, @NonNull MicroFragment previousStep)
     {
         return fragmentTransaction;
     }

@@ -17,6 +17,8 @@
 package org.dmfs.android.microfragments;
 
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 
 /**
@@ -24,9 +26,12 @@ import android.os.Parcelable;
  */
 public interface MicroFragmentEnvironment<T> extends Parcelable
 {
+    @NonNull
     MicroFragment<T> microFragment();
 
+    @NonNull
     MicroFragmentHost host();
 
+    @Nullable
     Parcelable result();
 }

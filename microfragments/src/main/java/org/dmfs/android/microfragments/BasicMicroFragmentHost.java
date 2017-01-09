@@ -18,6 +18,7 @@ package org.dmfs.android.microfragments;
 
 import android.content.Context;
 import android.os.Parcel;
+import android.support.annotation.NonNull;
 
 import org.dmfs.android.microfragments.transitions.FragmentTransition;
 import org.dmfs.pigeonpost.Cage;
@@ -31,14 +32,14 @@ public final class BasicMicroFragmentHost implements MicroFragmentHost
     private final Cage<FragmentTransition> mFragmentTransitionCage;
 
 
-    public BasicMicroFragmentHost(Cage<FragmentTransition> fragmentTransitionCage)
+    public BasicMicroFragmentHost(@NonNull Cage<FragmentTransition> fragmentTransitionCage)
     {
         mFragmentTransitionCage = fragmentTransitionCage;
     }
 
 
     @Override
-    public void execute(Context context, FragmentTransition fragmentTransition)
+    public void execute(@NonNull Context context, @NonNull FragmentTransition fragmentTransition)
     {
         mFragmentTransitionCage.pigeon(fragmentTransition).send(context);
     }

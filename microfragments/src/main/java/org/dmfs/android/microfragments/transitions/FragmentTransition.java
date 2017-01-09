@@ -42,6 +42,7 @@ public interface FragmentTransition extends Parcelable
      *
      * @return
      */
+    @NonNull
     Timestamp timestamp();
 
     void prepare(@NonNull Context context, @NonNull FragmentManager fragmentManager, @NonNull MicroFragmentHost host, @NonNull MicroFragment previousStep);
@@ -57,7 +58,8 @@ public interface FragmentTransition extends Parcelable
      *
      * @return A {@link FragmentTransaction} that performs this transition.
      */
-    FragmentTransaction updateTransaction(@NonNull Context context, @NonNull FragmentTransaction fragmentTransaction, FragmentManager fragmentManager, @NonNull MicroFragmentHost host, @NonNull MicroFragment previousStep);
+    @NonNull
+    FragmentTransaction updateTransaction(@NonNull Context context, @NonNull FragmentTransaction fragmentTransaction, @NonNull FragmentManager fragmentManager, @NonNull MicroFragmentHost host, @NonNull MicroFragment previousStep);
 
     void cleanup(@NonNull Context context, @NonNull FragmentManager fragmentManager, @NonNull MicroFragmentHost host, @NonNull MicroFragment previousStep);
 }

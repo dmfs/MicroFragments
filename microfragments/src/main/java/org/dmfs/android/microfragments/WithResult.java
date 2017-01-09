@@ -18,6 +18,8 @@ package org.dmfs.android.microfragments;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 
 /**
@@ -29,13 +31,14 @@ public final class WithResult<T> implements MicroFragmentEnvironment<T>, Parcela
     private final Parcelable mResult;
 
 
-    public WithResult(MicroFragmentEnvironment<T> delegate, Parcelable result)
+    public WithResult(@NonNull MicroFragmentEnvironment<T> delegate, @Nullable Parcelable result)
     {
         mDelegate = delegate;
         mResult = result;
     }
 
 
+    @NonNull
     @Override
     public MicroFragment<T> microFragment()
     {
@@ -43,6 +46,7 @@ public final class WithResult<T> implements MicroFragmentEnvironment<T>, Parcela
     }
 
 
+    @NonNull
     @Override
     public MicroFragmentHost host()
     {
@@ -50,6 +54,7 @@ public final class WithResult<T> implements MicroFragmentEnvironment<T>, Parcela
     }
 
 
+    @Nullable
     @Override
     public Parcelable result()
     {

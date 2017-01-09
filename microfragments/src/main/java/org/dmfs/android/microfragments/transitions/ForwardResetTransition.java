@@ -65,13 +65,14 @@ public final class ForwardResetTransition implements FragmentTransition, Parcela
      * @param nextStep
      *         The initial {@link MicroFragment}.
      */
-    public ForwardResetTransition(@NonNull MicroFragment nextStep, Timestamp timestamp)
+    public ForwardResetTransition(@NonNull MicroFragment nextStep, @NonNull Timestamp timestamp)
     {
         mNextStep = nextStep;
         mTimestamp = timestamp;
     }
 
 
+    @NonNull
     @Override
     public Timestamp timestamp()
     {
@@ -93,8 +94,9 @@ public final class ForwardResetTransition implements FragmentTransition, Parcela
     }
 
 
+    @NonNull
     @Override
-    public FragmentTransaction updateTransaction(@NonNull Context context, @NonNull FragmentTransaction fragmentTransaction, FragmentManager fragmentManager, @NonNull MicroFragmentHost host, @NonNull MicroFragment previousStep)
+    public FragmentTransaction updateTransaction(@NonNull Context context, @NonNull FragmentTransaction fragmentTransaction, @NonNull FragmentManager fragmentManager, @NonNull MicroFragmentHost host, @NonNull MicroFragment previousStep)
     {
         fragmentTransaction.replace(R.id.microfragments_host, mNextStep.fragment(context, host));
         return fragmentTransaction;

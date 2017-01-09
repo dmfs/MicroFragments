@@ -17,6 +17,7 @@
 
 package org.dmfs.android.microfragments.demo.microfragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
@@ -145,12 +146,12 @@ public final class IntermediateLoaderMicroFragment implements MicroFragment<Void
             @Override
             public void run()
             {
-                if (isAdded())
+                Activity activity = getActivity();
+                if (activity != null)
                 {
                     new FragmentEnvironment<>(LoadFragment.this)
                             .host()
-                            .execute(getActivity(),
-                                    new XFaded(new ForwardTransition(new MicroFragment2("Step2", URI.create("http://example.com")))));
+                            .execute(activity, new XFaded(new ForwardTransition(new MicroFragment2("Step2", URI.create("http://example.com")))));
                 }
             }
         };

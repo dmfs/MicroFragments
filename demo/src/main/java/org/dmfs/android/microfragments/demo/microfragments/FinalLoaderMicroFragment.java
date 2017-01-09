@@ -17,6 +17,7 @@
 
 package org.dmfs.android.microfragments.demo.microfragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Parcel;
@@ -152,11 +153,12 @@ public final class FinalLoaderMicroFragment implements MicroFragment<Void>
                 {
                 }
 
-                if (isAdded())
+                Activity activity = getActivity();
+                if (activity != null)
                 {
                     new FragmentEnvironment<>(LoadFragment.this)
                             .host()
-                            .execute(getActivity(), new Swiped(new ForwardResetTransition(new LastMicroFragment(), mTimestamp)));
+                            .execute(activity, new Swiped(new ForwardResetTransition(new LastMicroFragment(), mTimestamp)));
                 }
             }
         }

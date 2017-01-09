@@ -39,12 +39,13 @@ public final class XFaded implements FragmentTransition
     private final FragmentTransition mDelegate;
 
 
-    public XFaded(FragmentTransition delegate)
+    public XFaded(@NonNull FragmentTransition delegate)
     {
         mDelegate = delegate;
     }
 
 
+    @NonNull
     @Override
     public Timestamp timestamp()
     {
@@ -59,8 +60,9 @@ public final class XFaded implements FragmentTransition
     }
 
 
+    @NonNull
     @Override
-    public FragmentTransaction updateTransaction(@NonNull Context context, @NonNull FragmentTransaction fragmentTransaction, FragmentManager fragmentManager, @NonNull MicroFragmentHost host, @NonNull MicroFragment previousStep)
+    public FragmentTransaction updateTransaction(@NonNull Context context, @NonNull FragmentTransaction fragmentTransaction, @NonNull FragmentManager fragmentManager, @NonNull MicroFragmentHost host, @NonNull MicroFragment previousStep)
     {
         fragmentTransaction.setCustomAnimations(R.anim.microfragments_fade_enter, R.anim.microfragments_fade_exit, R.anim.microfragments_swipe_return,
                 R.anim.microfragments_swipe_back);

@@ -23,6 +23,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -32,8 +33,8 @@ import org.dmfs.android.microfragments.MicroFragmentEnvironment;
 import org.dmfs.android.microfragments.MicroFragmentHost;
 import org.dmfs.android.microfragments.R;
 import org.dmfs.android.microfragments.Timestamp;
-import org.dmfs.android.microfragments.timestamps.UiTimestamp;
 import org.dmfs.android.microfragments.WithResult;
+import org.dmfs.android.microfragments.timestamps.UiTimestamp;
 
 
 /**
@@ -53,7 +54,7 @@ public final class BackWithResultTransition implements FragmentTransition
      * Creates a {@link FragmentTransition} that goes back to the previous {@link MicroFragment}.
      */
     @MainThread
-    public BackWithResultTransition(Parcelable result)
+    public BackWithResultTransition(@Nullable Parcelable result)
     {
         this(result, new UiTimestamp());
     }
@@ -62,13 +63,14 @@ public final class BackWithResultTransition implements FragmentTransition
     /**
      * Creates a {@link FragmentTransition} that goes back to the previous {@link MicroFragment}.
      */
-    public BackWithResultTransition(Parcelable result, Timestamp timestamp)
+    public BackWithResultTransition(@Nullable Parcelable result, @NonNull Timestamp timestamp)
     {
         mResult = result;
         mTimestamp = timestamp;
     }
 
 
+    @NonNull
     @Override
     public Timestamp timestamp()
     {
@@ -83,8 +85,9 @@ public final class BackWithResultTransition implements FragmentTransition
     }
 
 
+    @NonNull
     @Override
-    public FragmentTransaction updateTransaction(@NonNull Context context, @NonNull FragmentTransaction fragmentTransaction, FragmentManager fragmentManager, @NonNull MicroFragmentHost host, @NonNull MicroFragment previousStep)
+    public FragmentTransaction updateTransaction(@NonNull Context context, @NonNull FragmentTransaction fragmentTransaction, @NonNull FragmentManager fragmentManager, @NonNull MicroFragmentHost host, @NonNull MicroFragment previousStep)
     {
         // nothing to add
         return fragmentTransaction;
