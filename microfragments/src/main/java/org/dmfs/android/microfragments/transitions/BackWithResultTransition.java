@@ -32,7 +32,7 @@ import org.dmfs.android.microfragments.MicroFragmentEnvironment;
 import org.dmfs.android.microfragments.MicroFragmentHost;
 import org.dmfs.android.microfragments.R;
 import org.dmfs.android.microfragments.Timestamp;
-import org.dmfs.android.microfragments.UiTimestamp;
+import org.dmfs.android.microfragments.timestamps.UiTimestamp;
 import org.dmfs.android.microfragments.WithResult;
 
 

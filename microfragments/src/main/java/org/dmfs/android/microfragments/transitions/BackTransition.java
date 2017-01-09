@@ -28,11 +28,12 @@ import android.support.v4.app.FragmentTransaction;
 import org.dmfs.android.microfragments.MicroFragment;
 import org.dmfs.android.microfragments.MicroFragmentHost;
 import org.dmfs.android.microfragments.Timestamp;
-import org.dmfs.android.microfragments.UiTimestamp;
+import org.dmfs.android.microfragments.timestamps.UiTimestamp;
 
 
 /**
- * A {@link FragmentTransition} that returns to the previous {@link MicroFragment} on the backstack.
+ * A {@link FragmentTransition} that returns to the previous {@link MicroFragment} by popping the last transaction from the backstack. If there is no
+ * transaction on the backstack this won't do anything.
  *
  * @author Marten Gajda
  */
@@ -52,12 +53,19 @@ public final class BackTransition implements FragmentTransition
     }
 
 
-    public BackTransition(Timestamp timestamp)
+    /**
+     * Creates a {@link FragmentTransition} that goes back to the previous {@link MicroFragment} using the given {@link Timestamp}.
+     *
+     * @param timestamp
+     *         The {@link Timestamp} of the origin of this transition.
+     */
+    public BackTransition(@NonNull Timestamp timestamp)
     {
         mTimestamp = timestamp;
     }
 
 
+    @NonNull
     @Override
     public Timestamp timestamp()
     {
@@ -72,6 +80,7 @@ public final class BackTransition implements FragmentTransition
     }
 
 
+    @NonNull
     @Override
     public FragmentTransaction updateTransaction(@NonNull Context context, @NonNull FragmentTransaction fragmentTransaction, FragmentManager fragmentManager, @NonNull MicroFragmentHost host, @NonNull MicroFragment previousStep)
     {

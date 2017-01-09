@@ -14,16 +14,21 @@
  * limitations under the License.
  */
 
-package org.dmfs.android.microfragments;
+package org.dmfs.android.microfragments.timestamps;
 
 import android.os.Looper;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.MainThread;
+import android.support.annotation.NonNull;
+
+import org.dmfs.android.microfragments.Timestamp;
 
 
 /**
  * A {@link Timestamp} that originated on the main thread.
+ * <p>
+ * Note a {@link UiTimestamp} can not be created on a background thread.
  *
  * @author Marten Gajda
  */
@@ -32,6 +37,9 @@ public final class UiTimestamp implements Timestamp, Parcelable
     private final long mTimestamp;
 
 
+    /**
+     * Creates a {@link UiTimestamp}.
+     */
     @MainThread
     public UiTimestamp()
     {
@@ -50,16 +58,16 @@ public final class UiTimestamp implements Timestamp, Parcelable
 
 
     @Override
-    public long nanoseconds()
+    public long nanoSeconds()
     {
         return mTimestamp;
     }
 
 
     @Override
-    public boolean isAfter(Timestamp other)
+    public boolean isAfter(@NonNull Timestamp other)
     {
-        return mTimestamp > other.nanoseconds();
+        return 0 > other.nanoSeconds() - mTimestamp;
     }
 
 
@@ -108,6 +116,6 @@ public final class UiTimestamp implements Timestamp, Parcelable
         {
             return false;
         }
-        return mTimestamp == ((Timestamp) o).nanoseconds();
+        return mTimestamp == ((Timestamp) o).nanoSeconds();
     }
 }

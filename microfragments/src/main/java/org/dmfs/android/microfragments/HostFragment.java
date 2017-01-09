@@ -31,6 +31,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 
+import org.dmfs.android.microfragments.timestamps.UiTimestamp;
 import org.dmfs.android.microfragments.transitions.FragmentTransition;
 import org.dmfs.pigeonpost.Cage;
 import org.dmfs.pigeonpost.Dovecote;
@@ -57,6 +58,7 @@ public final class HostFragment extends Fragment implements FragmentManager.OnBa
         super.onCreate(savedInstanceState);
         mFragmentManager = getChildFragmentManager();
         mFragmentManager.addOnBackStackChangedListener(this);
+        mOperationDoveCote = new ParcelableDovecote<>(getActivity(), "wizardhost", this);
     }
 
 
@@ -78,7 +80,6 @@ public final class HostFragment extends Fragment implements FragmentManager.OnBa
     public void onStart()
     {
         mInstanceStateSaved = false;
-        mOperationDoveCote = new ParcelableDovecote<>(getActivity(), "wizardhost", this);
         if (currentFragment() == null)
         {
             mFragmentManager.beginTransaction()
@@ -99,7 +100,6 @@ public final class HostFragment extends Fragment implements FragmentManager.OnBa
     @Override
     public void onStop()
     {
-        mOperationDoveCote.dispose();
         super.onStop();
     }
 
@@ -109,6 +109,14 @@ public final class HostFragment extends Fragment implements FragmentManager.OnBa
     {
         mInstanceStateSaved = true;
         super.onSaveInstanceState(outState);
+    }
+
+
+    @Override
+    public void onDestroy()
+    {
+        mOperationDoveCote.dispose();
+        super.onDestroy();
     }
 
 
@@ -133,7 +141,7 @@ public final class HostFragment extends Fragment implements FragmentManager.OnBa
     private void postUpdate(MicroFragment currentStep)
     {
         Cage<MicroFragmentState> cage = getArguments().getParcelable("cage");
-        if (cage == null || !isAdded())
+        if (cage == null || !isResumed())
         {
             // no pigeon to be send
             return;
@@ -148,9 +156,15 @@ public final class HostFragment extends Fragment implements FragmentManager.OnBa
     {
         if (mInstanceStateSaved)
         {
-            // ignore pigeons that return after saving the instance state
             return;
         }
+
+        executeTransition(fragmentTransition);
+    }
+
+
+    private void executeTransition(FragmentTransition fragmentTransition)
+    {
 
         if (!fragmentTransition.timestamp().isAfter(mLastTransactionTimestamp))
         {

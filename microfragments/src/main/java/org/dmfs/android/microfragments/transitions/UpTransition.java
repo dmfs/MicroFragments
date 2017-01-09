@@ -22,52 +22,40 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
 import org.dmfs.android.microfragments.MicroFragment;
 import org.dmfs.android.microfragments.MicroFragmentHost;
-import org.dmfs.android.microfragments.R;
 import org.dmfs.android.microfragments.Timestamp;
 import org.dmfs.android.microfragments.timestamps.UiTimestamp;
 
 
 /**
- * A {@link FragmentTransition} that clears the back stack and starts over with a new {@link MicroFragment} using a "forward" animation.
- * <p>
- * Note, the previous fragment will be swiped out to the left (to the right for RTL languages). At present this can not be configured.
+ * A {@link FragmentTransition} that clears the back stack and returns the the initial MicroFragment.
  *
  * @author Marten Gajda
  */
-public final class ForwardResetTransition implements FragmentTransition, Parcelable
+public final class UpTransition implements FragmentTransition, Parcelable
 {
-    private final MicroFragment mNextStep;
     private final Timestamp mTimestamp;
 
 
     /**
      * Creates a {@link FragmentTransition} that resets the back stack and starts over with the given {@link MicroFragment}.
-     *
-     * @param nextStep
-     *         The initial {@link MicroFragment}.
      */
     @MainThread
-    public ForwardResetTransition(@NonNull MicroFragment nextStep)
+    public UpTransition()
     {
-        this(nextStep, new UiTimestamp());
+        this(new UiTimestamp());
     }
 
 
     /**
      * Creates a {@link FragmentTransition} that resets the back stack and starts over with the given {@link MicroFragment}.
-     *
-     * @param nextStep
-     *         The initial {@link MicroFragment}.
      */
-    public ForwardResetTransition(@NonNull MicroFragment nextStep, Timestamp timestamp)
+    public UpTransition(@NonNull Timestamp timestamp)
     {
-        mNextStep = nextStep;
         mTimestamp = timestamp;
     }
 
@@ -82,13 +70,6 @@ public final class ForwardResetTransition implements FragmentTransition, Parcela
     @Override
     public void prepare(@NonNull Context context, @NonNull FragmentManager fragmentManager, @NonNull MicroFragmentHost host, @NonNull MicroFragment previousStep)
     {
-        // insert an empty dummy fragment to enforce the animation that we want, otherwise the pop animation of the curent fragment would be played which is usually not what we want
-        fragmentManager.beginTransaction()
-                .setCustomAnimations(R.anim.microfragments_swipe_enter, R.anim.microfragments_swipe_exit, R.anim.microfragments_swipe_enter,
-                        R.anim.microfragments_swipe_exit)
-                .replace(R.id.microfragments_host, new Fragment())
-                .commit();
-        fragmentManager.executePendingTransactions();
         fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
     }
 
@@ -96,7 +77,6 @@ public final class ForwardResetTransition implements FragmentTransition, Parcela
     @Override
     public FragmentTransaction updateTransaction(@NonNull Context context, @NonNull FragmentTransaction fragmentTransaction, FragmentManager fragmentManager, @NonNull MicroFragmentHost host, @NonNull MicroFragment previousStep)
     {
-        fragmentTransaction.replace(R.id.microfragments_host, mNextStep.fragment(context, host));
         return fragmentTransaction;
     }
 
@@ -118,26 +98,25 @@ public final class ForwardResetTransition implements FragmentTransition, Parcela
     @Override
     public void writeToParcel(Parcel dest, int flags)
     {
-        dest.writeParcelable(mNextStep, flags);
+        dest.writeParcelable(mTimestamp, flags);
     }
 
 
-    public final static Creator<ForwardResetTransition> CREATOR = new Creator<ForwardResetTransition>()
+    public final static Creator<UpTransition> CREATOR = new Creator<UpTransition>()
     {
         @Override
-        public ForwardResetTransition createFromParcel(Parcel source)
+        public UpTransition createFromParcel(Parcel source)
         {
             ClassLoader loader = getClass().getClassLoader();
-            MicroFragment<?> microFragment = source.readParcelable(loader);
             Timestamp timestamp = source.readParcelable(loader);
-            return new ForwardResetTransition(microFragment, timestamp);
+            return new UpTransition(timestamp);
         }
 
 
         @Override
-        public ForwardResetTransition[] newArray(int size)
+        public UpTransition[] newArray(int size)
         {
-            return new ForwardResetTransition[size];
+            return new UpTransition[size];
         }
     };
 }

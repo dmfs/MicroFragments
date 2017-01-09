@@ -27,7 +27,7 @@ import android.support.v4.app.Fragment;
  *
  * @author Marten Gajda
  */
-public class FragmentEnvironment<T> implements MicroFragmentEnvironment<T>
+public final class FragmentEnvironment<T> implements MicroFragmentEnvironment<T>
 {
     private final Bundle mArguments;
 

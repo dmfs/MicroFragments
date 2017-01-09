@@ -29,7 +29,7 @@ import org.dmfs.android.microfragments.MicroFragment;
 import org.dmfs.android.microfragments.MicroFragmentHost;
 import org.dmfs.android.microfragments.R;
 import org.dmfs.android.microfragments.Timestamp;
-import org.dmfs.android.microfragments.UiTimestamp;
+import org.dmfs.android.microfragments.timestamps.UiTimestamp;
 
 
 /**
@@ -109,6 +109,7 @@ public final class ResetTransition implements FragmentTransition, Parcelable
     public void writeToParcel(Parcel dest, int flags)
     {
         dest.writeParcelable(mNextStep, flags);
+        dest.writeParcelable(mTimestamp, flags);
     }
 
 
