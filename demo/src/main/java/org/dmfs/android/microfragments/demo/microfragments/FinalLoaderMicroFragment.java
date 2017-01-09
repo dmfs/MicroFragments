@@ -32,8 +32,8 @@ import org.dmfs.android.microfragments.FragmentEnvironment;
 import org.dmfs.android.microfragments.MicroFragment;
 import org.dmfs.android.microfragments.MicroFragmentHost;
 import org.dmfs.android.microfragments.Timestamp;
-import org.dmfs.android.microfragments.timestamps.UiTimestamp;
 import org.dmfs.android.microfragments.demo.R;
+import org.dmfs.android.microfragments.timestamps.UiTimestamp;
 import org.dmfs.android.microfragments.transitions.ForwardResetTransition;
 import org.dmfs.android.microfragments.transitions.Swiped;
 
@@ -110,14 +110,13 @@ public final class FinalLoaderMicroFragment implements MicroFragment<Void>
     public static class LoadFragment extends Fragment
     {
         private final static int DELAY_WAIT_MESSAGE = 2500;
-        private Timestamp mTimestamp;
 
 
         @Override
         public void onCreate(@Nullable Bundle savedInstanceState)
         {
             super.onCreate(savedInstanceState);
-            mTimestamp = new UiTimestamp();
+            new Loader(new UiTimestamp()).start();
         }
 
 
@@ -128,14 +127,6 @@ public final class FinalLoaderMicroFragment implements MicroFragment<Void>
             View result = inflater.inflate(R.layout.fragment_loading, container, false);
             result.findViewById(android.R.id.message).animate().alpha(1).setStartDelay(DELAY_WAIT_MESSAGE);
             return result;
-        }
-
-
-        @Override
-        public void onResume()
-        {
-            super.onResume();
-            new Loader(mTimestamp).start();
         }
 
 
@@ -161,7 +152,7 @@ public final class FinalLoaderMicroFragment implements MicroFragment<Void>
                 {
                 }
 
-                if (isResumed())
+                if (isAdded())
                 {
                     new FragmentEnvironment<>(LoadFragment.this)
                             .host()

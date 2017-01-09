@@ -37,6 +37,8 @@ import org.dmfs.pigeonpost.Cage;
 import org.dmfs.pigeonpost.Dovecote;
 import org.dmfs.pigeonpost.localbroadcast.ParcelableDovecote;
 
+import java.util.LinkedList;
+
 
 /**
  * A {@link Fragment} to host a {@link MicroFragmentFlow}.
@@ -50,6 +52,11 @@ public final class HostFragment extends Fragment implements FragmentManager.OnBa
     private ParcelableDovecote<FragmentTransition> mOperationDoveCote;
     private boolean mInstanceStateSaved;
     private Timestamp mLastTransactionTimestamp = new UiTimestamp();
+
+    /**
+     * A queue of {@link FragmentTransition}s that arrive while this Fragment is paused. Note that the queue is no persisted.
+     */
+    private final LinkedList<FragmentTransition> mTransitionQueue = new LinkedList<>();
 
 
     @Override
@@ -90,17 +97,17 @@ public final class HostFragment extends Fragment implements FragmentManager.OnBa
         }
         else
         {
+
+            // play queued transitions
+            while (!mTransitionQueue.isEmpty())
+            {
+                executeTransition(mTransitionQueue.removeFirst());
+            }
+
             mBackStackDepth = mFragmentManager.getBackStackEntryCount();
             postUpdate(new FragmentEnvironment<>(currentFragment()).microFragment());
         }
         super.onStart();
-    }
-
-
-    @Override
-    public void onStop()
-    {
-        super.onStop();
     }
 
 
@@ -156,6 +163,8 @@ public final class HostFragment extends Fragment implements FragmentManager.OnBa
     {
         if (mInstanceStateSaved)
         {
+            // store the transition for later
+            mTransitionQueue.addLast(fragmentTransition);
             return;
         }
 

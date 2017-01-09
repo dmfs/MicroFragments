@@ -114,6 +114,14 @@ public final class IntermediateLoaderMicroFragment implements MicroFragment<Void
         private final Handler mHandler = new Handler();
 
 
+        @Override
+        public void onCreate(@Nullable Bundle savedInstanceState)
+        {
+            super.onCreate(savedInstanceState);
+            mHandler.postDelayed(mFakeLoader, DELAY_WAIT_MESSAGE * 2);
+        }
+
+
         @Nullable
         @Override
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
@@ -125,18 +133,10 @@ public final class IntermediateLoaderMicroFragment implements MicroFragment<Void
 
 
         @Override
-        public void onResume()
-        {
-            super.onResume();
-            mHandler.postDelayed(mFakeLoader, DELAY_WAIT_MESSAGE * 2);
-        }
-
-
-        @Override
-        public void onPause()
+        public void onDestroy()
         {
             mHandler.removeCallbacks(mFakeLoader);
-            super.onPause();
+            super.onDestroy();
         }
 
 
@@ -145,7 +145,7 @@ public final class IntermediateLoaderMicroFragment implements MicroFragment<Void
             @Override
             public void run()
             {
-                if (isResumed())
+                if (isAdded())
                 {
                     new FragmentEnvironment<>(LoadFragment.this)
                             .host()
