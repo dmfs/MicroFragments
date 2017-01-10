@@ -17,7 +17,6 @@
 
 package org.dmfs.android.microfragments.demo.microfragments;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
@@ -119,7 +118,6 @@ public final class IntermediateLoaderMicroFragment implements MicroFragment<Void
         public void onCreate(@Nullable Bundle savedInstanceState)
         {
             super.onCreate(savedInstanceState);
-            mHandler.postDelayed(mFakeLoader, DELAY_WAIT_MESSAGE * 2);
         }
 
 
@@ -134,10 +132,18 @@ public final class IntermediateLoaderMicroFragment implements MicroFragment<Void
 
 
         @Override
-        public void onDestroy()
+        public void onResume()
+        {
+            super.onResume();
+            mHandler.postDelayed(mFakeLoader, DELAY_WAIT_MESSAGE * 2);
+        }
+
+
+        @Override
+        public void onPause()
         {
             mHandler.removeCallbacks(mFakeLoader);
-            super.onDestroy();
+            super.onPause();
         }
 
 
@@ -146,12 +152,11 @@ public final class IntermediateLoaderMicroFragment implements MicroFragment<Void
             @Override
             public void run()
             {
-                Activity activity = getActivity();
-                if (activity != null)
+                if (isResumed())
                 {
                     new FragmentEnvironment<>(LoadFragment.this)
                             .host()
-                            .execute(activity, new XFaded(new ForwardTransition(new MicroFragment2("Step2", URI.create("http://example.com")))));
+                            .execute(getActivity(), new XFaded(new ForwardTransition(new MicroFragment2("Step2", URI.create("http://example.com")))));
                 }
             }
         };
