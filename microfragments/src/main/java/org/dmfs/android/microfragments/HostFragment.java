@@ -97,17 +97,24 @@ public final class HostFragment extends Fragment implements FragmentManager.OnBa
         }
         else
         {
-
-            // play queued transitions
-            while (!mTransitionQueue.isEmpty())
-            {
-                executeTransition(mTransitionQueue.removeFirst());
-            }
-
-            mBackStackDepth = mFragmentManager.getBackStackEntryCount();
-            postUpdate(new FragmentEnvironment<>(currentFragment()).microFragment());
+            // replay transitions as early as possible
+            replayTransitions();
         }
         super.onStart();
+    }
+
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        mInstanceStateSaved = false;
+        if (!mTransitionQueue.isEmpty())
+        {
+            // maybe onStart wasn't called because the fragment wasn't stopped, just paused
+            replayTransitions();
+        }
+        postUpdate(new FragmentEnvironment<>(currentFragment()).microFragment());
     }
 
 
@@ -124,6 +131,18 @@ public final class HostFragment extends Fragment implements FragmentManager.OnBa
     {
         mOperationDoveCote.dispose();
         super.onDestroy();
+    }
+
+
+    private void replayTransitions()
+    {
+        // play queued transitions
+        while (!mTransitionQueue.isEmpty())
+        {
+            executeTransition(mTransitionQueue.removeFirst());
+        }
+
+        mBackStackDepth = mFragmentManager.getBackStackEntryCount();
     }
 
 
