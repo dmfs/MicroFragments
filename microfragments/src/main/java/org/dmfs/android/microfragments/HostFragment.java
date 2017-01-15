@@ -17,6 +17,7 @@
 
 package org.dmfs.android.microfragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -24,7 +25,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,7 +45,7 @@ import java.util.LinkedList;
  *
  * @author Marten Gajda
  */
-public final class HostFragment extends Fragment implements FragmentManager.OnBackStackChangedListener, Dovecote.OnPigeonReturnCallback<FragmentTransition>, View.OnKeyListener
+public final class HostFragment extends Fragment implements FragmentManager.OnBackStackChangedListener, Dovecote.OnPigeonReturnCallback<FragmentTransition>
 {
     private FragmentManager mFragmentManager;
     private int mBackStackDepth = 0;
@@ -76,9 +76,6 @@ public final class HostFragment extends Fragment implements FragmentManager.OnBa
         View result = new FrameLayout(inflater.getContext());
         result.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         result.setId(R.id.microfragments_host);
-        result.setOnKeyListener(this);
-        // make sure we receive the back button event
-        result.setFocusableInTouchMode(true);
         return result;
     }
 
@@ -139,7 +136,7 @@ public final class HostFragment extends Fragment implements FragmentManager.OnBa
         // play queued transitions
         while (!mTransitionQueue.isEmpty())
         {
-            executeTransition(mTransitionQueue.removeFirst());
+            executeTransition(getActivity(), mTransitionQueue.removeFirst());
         }
 
         mBackStackDepth = mFragmentManager.getBackStackEntryCount();
@@ -187,11 +184,11 @@ public final class HostFragment extends Fragment implements FragmentManager.OnBa
             return;
         }
 
-        executeTransition(fragmentTransition);
+        executeTransition(getActivity(), fragmentTransition);
     }
 
 
-    private void executeTransition(@NonNull FragmentTransition fragmentTransition)
+    private void executeTransition(@NonNull Activity activity, @NonNull FragmentTransition fragmentTransition)
     {
 
         if (!fragmentTransition.timestamp().isAfter(mLastTransactionTimestamp))
@@ -203,26 +200,25 @@ public final class HostFragment extends Fragment implements FragmentManager.OnBa
 
         MicroFragment microFragment = new FragmentEnvironment<>(mFragmentManager.findFragmentById(R.id.microfragments_host)).microFragment();
         MicroFragmentHost host = new BasicMicroFragmentHost(mOperationDoveCote.cage());
-        fragmentTransition.prepare(getActivity(), mFragmentManager, host, microFragment);
-        FragmentTransaction fragmentTransaction = fragmentTransition.updateTransaction(getActivity(), mFragmentManager.beginTransaction(),
+        fragmentTransition.prepare(activity, mFragmentManager, host, microFragment);
+        FragmentTransaction fragmentTransaction = fragmentTransition.updateTransaction(activity, mFragmentManager.beginTransaction(),
                 mFragmentManager, host, microFragment);
         if (!fragmentTransaction.isEmpty())
         {
             fragmentTransaction.commit();
         }
         mFragmentManager.executePendingTransactions();
-        fragmentTransition.cleanup(getActivity(), mFragmentManager, host, microFragment);
+        fragmentTransition.cleanup(activity, mFragmentManager, host, microFragment);
 
         // post an update, in case the backstack has not been changed by the transition we still have to notify the listener
         postUpdate(new FragmentEnvironment<>(currentFragment()).microFragment());
 
         // close keyboard if necessary
-        View view = getActivity().getCurrentFocus();
-        if (view == null)
+        if (activity.getCurrentFocus() == null)
         {
             // no view is focused, close the keyboard
-            InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-            inputManager.hideSoftInputFromWindow(getActivity().findViewById(android.R.id.content).getWindowToken(), 0);
+            InputMethodManager inputManager = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputManager.hideSoftInputFromWindow(activity.findViewById(android.R.id.content).getWindowToken(), 0);
         }
     }
 
@@ -230,21 +226,5 @@ public final class HostFragment extends Fragment implements FragmentManager.OnBa
     private Fragment currentFragment()
     {
         return mFragmentManager.findFragmentById(R.id.microfragments_host);
-    }
-
-
-    @Override
-    public boolean onKey(View view, int i, KeyEvent keyEvent)
-    {
-        // nested Fragments don't respond to the back key, so we have to do that manually
-        if (keyEvent.getKeyCode() == KeyEvent.KEYCODE_BACK && mFragmentManager.getBackStackEntryCount() > 0)
-        {
-            if (keyEvent.getAction() == KeyEvent.ACTION_UP)
-            {
-                mFragmentManager.popBackStackImmediate();
-            }
-            return true;
-        }
-        return false;
     }
 }

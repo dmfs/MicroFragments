@@ -29,11 +29,16 @@ import org.dmfs.android.microfragments.MicroFragment;
 import org.dmfs.android.microfragments.MicroFragmentHost;
 import org.dmfs.android.microfragments.Timestamp;
 import org.dmfs.android.microfragments.timestamps.UiTimestamp;
+import org.dmfs.android.microfragments.utils.DeadPigeonCage;
+import org.dmfs.pigeonpost.Cage;
+import org.dmfs.pigeonpost.Pigeon;
 
 
 /**
- * A {@link FragmentTransition} that returns to the previous {@link MicroFragment} by popping the last transaction from the backstack. If there is no
- * transaction on the backstack this won't do anything.
+ * A {@link FragmentTransition} that returns to the previous non-skipable {@link MicroFragment} on the backstack, if there is any.
+ * <p>
+ * This transition takes an optional {@link Cage} argument to send the result of the back operation (i.e. whether there was a previous {@link MicroFragment} to
+ * go back to) to the caller.
  *
  * @author Marten Gajda
  */
@@ -41,6 +46,7 @@ public final class BackTransition implements FragmentTransition
 {
 
     private final Timestamp mTimestamp;
+    private final Cage<Boolean> mResponseCage;
 
 
     /**
@@ -49,7 +55,7 @@ public final class BackTransition implements FragmentTransition
     @MainThread
     public BackTransition()
     {
-        this(new UiTimestamp());
+        this(new UiTimestamp(), DeadPigeonCage.<Boolean>instance());
     }
 
 
@@ -61,7 +67,35 @@ public final class BackTransition implements FragmentTransition
      */
     public BackTransition(@NonNull Timestamp timestamp)
     {
+        this(timestamp, DeadPigeonCage.<Boolean>instance());
+    }
+
+
+    /**
+     * Creates a {@link FragmentTransition} that goes back to the previous {@link MicroFragment}.
+     *
+     * @param responseCage
+     *         A {@link Cage} for {@link Boolean} {@link Pigeon}s to deliver the result of the operation.
+     */
+    @MainThread
+    public BackTransition(@NonNull Cage<Boolean> responseCage)
+    {
+        this(new UiTimestamp(), responseCage);
+    }
+
+
+    /**
+     * Creates a {@link FragmentTransition} that goes back to the previous {@link MicroFragment} using the given {@link Timestamp}.
+     *
+     * @param timestamp
+     *         The {@link Timestamp} of the origin of this transition.
+     * @param responseCage
+     *         A {@link Cage} for {@link Boolean} {@link Pigeon}s to deliver the result of the operation.
+     */
+    public BackTransition(@NonNull Timestamp timestamp, @NonNull Cage<Boolean> responseCage)
+    {
         mTimestamp = timestamp;
+        mResponseCage = responseCage;
     }
 
 
@@ -76,7 +110,7 @@ public final class BackTransition implements FragmentTransition
     @Override
     public void prepare(@NonNull Context context, @NonNull FragmentManager fragmentManager, @NonNull MicroFragmentHost host, @NonNull MicroFragment previousStep)
     {
-        fragmentManager.popBackStackImmediate();
+        mResponseCage.pigeon(fragmentManager.popBackStackImmediate()).send(context);
     }
 
 

@@ -22,9 +22,12 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
+import org.dmfs.android.microfragments.MicroFragmentHost;
 import org.dmfs.android.microfragments.MicroFragmentState;
 import org.dmfs.android.microfragments.SimpleMicroFragmentFlow;
 import org.dmfs.android.microfragments.demo.microfragments.MicroFragment1;
+import org.dmfs.android.microfragments.transitions.BackTransition;
+import org.dmfs.android.microfragments.utils.BooleanDovecote;
 import org.dmfs.pigeonpost.Dovecote;
 import org.dmfs.pigeonpost.localbroadcast.ParcelableDovecote;
 
@@ -32,6 +35,8 @@ import org.dmfs.pigeonpost.localbroadcast.ParcelableDovecote;
 public final class MicroFragmentsDemoActivity extends AppCompatActivity implements Dovecote.OnPigeonReturnCallback<MicroFragmentState>
 {
     private Dovecote<MicroFragmentState> mDovecote;
+    private Dovecote<Boolean> mBackDovecote;
+    private MicroFragmentHost mMicroFragmentHost;
 
 
     @Override
@@ -43,11 +48,34 @@ public final class MicroFragmentsDemoActivity extends AppCompatActivity implemen
         setSupportActionBar(toolbar);
 
         mDovecote = new ParcelableDovecote<>(this, "microfragments", this);
+        mBackDovecote = new BooleanDovecote(this, "backresult", new Dovecote.OnPigeonReturnCallback<Boolean>()
+        {
+            @Override
+            public void onPigeonReturn(@NonNull Boolean aBoolean)
+            {
+                if (!aBoolean)
+                {
+                    finish();
+                }
+            }
+        });
 
         if (savedInstanceState == null)
         {
-            new SimpleMicroFragmentFlow(new MicroFragment1("Step1"), R.id.wizard_host).withPigeonCage(mDovecote.cage()).start(this);
+            mMicroFragmentHost = new SimpleMicroFragmentFlow(new MicroFragment1("Step1"), R.id.wizard_host).withPigeonCage(mDovecote.cage()).start(this);
         }
+        else
+        {
+            mMicroFragmentHost = savedInstanceState.getParcelable("host");
+        }
+    }
+
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState)
+    {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable("host", mMicroFragmentHost);
     }
 
 
@@ -55,6 +83,7 @@ public final class MicroFragmentsDemoActivity extends AppCompatActivity implemen
     protected void onDestroy()
     {
         mDovecote.dispose();
+        mBackDovecote.dispose();
         super.onDestroy();
     }
 
@@ -65,4 +94,10 @@ public final class MicroFragmentsDemoActivity extends AppCompatActivity implemen
         getSupportActionBar().setTitle(payload.currentStep().title(this));
     }
 
+
+    @Override
+    public void onBackPressed()
+    {
+        mMicroFragmentHost.execute(this, new BackTransition(mBackDovecote.cage()));
+    }
 }
