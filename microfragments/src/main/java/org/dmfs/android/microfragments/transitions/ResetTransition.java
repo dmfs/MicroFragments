@@ -78,7 +78,7 @@ public final class ResetTransition implements FragmentTransition, Parcelable
 
 
     @Override
-    public void prepare(@NonNull Context context, @NonNull FragmentManager fragmentManager, @NonNull MicroFragmentHost host, @NonNull MicroFragment previousStep)
+    public void prepare(@NonNull Context context, @NonNull FragmentManager fragmentManager, @NonNull MicroFragmentHost host, @NonNull MicroFragment<?> previousStep)
     {
         fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
     }
@@ -86,7 +86,7 @@ public final class ResetTransition implements FragmentTransition, Parcelable
 
     @NonNull
     @Override
-    public FragmentTransaction updateTransaction(@NonNull Context context, @NonNull FragmentTransaction fragmentTransaction, @NonNull FragmentManager fragmentManager, @NonNull MicroFragmentHost host, @NonNull MicroFragment previousStep)
+    public FragmentTransaction updateTransaction(@NonNull Context context, @NonNull FragmentTransaction fragmentTransaction, @NonNull FragmentManager fragmentManager, @NonNull MicroFragmentHost host, @NonNull MicroFragment<?> previousStep)
     {
         fragmentTransaction.replace(R.id.microfragments_host, mNextStep.fragment(context, host));
         return fragmentTransaction;
@@ -94,7 +94,7 @@ public final class ResetTransition implements FragmentTransition, Parcelable
 
 
     @Override
-    public void cleanup(@NonNull Context context, @NonNull FragmentManager fragmentManager, @NonNull MicroFragmentHost host, @NonNull MicroFragment previousStep)
+    public void cleanup(@NonNull Context context, @NonNull FragmentManager fragmentManager, @NonNull MicroFragmentHost host, @NonNull MicroFragment<?> previousStep)
     {
         // nothing to be done
     }

@@ -108,7 +108,7 @@ public final class BackTransition implements FragmentTransition
 
 
     @Override
-    public void prepare(@NonNull Context context, @NonNull FragmentManager fragmentManager, @NonNull MicroFragmentHost host, @NonNull MicroFragment previousStep)
+    public void prepare(@NonNull Context context, @NonNull FragmentManager fragmentManager, @NonNull MicroFragmentHost host, @NonNull MicroFragment<?> previousStep)
     {
         mResponseCage.pigeon(fragmentManager.popBackStackImmediate()).send(context);
     }
@@ -116,7 +116,7 @@ public final class BackTransition implements FragmentTransition
 
     @NonNull
     @Override
-    public FragmentTransaction updateTransaction(@NonNull Context context, @NonNull FragmentTransaction fragmentTransaction, @NonNull FragmentManager fragmentManager, @NonNull MicroFragmentHost host, @NonNull MicroFragment previousStep)
+    public FragmentTransaction updateTransaction(@NonNull Context context, @NonNull FragmentTransaction fragmentTransaction, @NonNull FragmentManager fragmentManager, @NonNull MicroFragmentHost host, @NonNull MicroFragment<?> previousStep)
     {
         // nothing to add here
         return fragmentTransaction;
@@ -124,7 +124,7 @@ public final class BackTransition implements FragmentTransition
 
 
     @Override
-    public void cleanup(@NonNull Context context, @NonNull FragmentManager fragmentManager, @NonNull MicroFragmentHost host, @NonNull MicroFragment previousStep)
+    public void cleanup(@NonNull Context context, @NonNull FragmentManager fragmentManager, @NonNull MicroFragmentHost host, @NonNull MicroFragment<?> previousStep)
     {
         // nothing to be done
     }

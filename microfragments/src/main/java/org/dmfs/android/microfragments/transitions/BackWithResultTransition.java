@@ -79,7 +79,7 @@ public final class BackWithResultTransition implements FragmentTransition
 
 
     @Override
-    public void prepare(@NonNull Context context, @NonNull FragmentManager fragmentManager, @NonNull MicroFragmentHost host, @NonNull MicroFragment previousStep)
+    public void prepare(@NonNull Context context, @NonNull FragmentManager fragmentManager, @NonNull MicroFragmentHost host, @NonNull MicroFragment<?> previousStep)
     {
         fragmentManager.popBackStackImmediate();
     }
@@ -87,7 +87,7 @@ public final class BackWithResultTransition implements FragmentTransition
 
     @NonNull
     @Override
-    public FragmentTransaction updateTransaction(@NonNull Context context, @NonNull FragmentTransaction fragmentTransaction, @NonNull FragmentManager fragmentManager, @NonNull MicroFragmentHost host, @NonNull MicroFragment previousStep)
+    public FragmentTransaction updateTransaction(@NonNull Context context, @NonNull FragmentTransaction fragmentTransaction, @NonNull FragmentManager fragmentManager, @NonNull MicroFragmentHost host, @NonNull MicroFragment<?> previousStep)
     {
         // nothing to add
         return fragmentTransaction;
@@ -95,7 +95,7 @@ public final class BackWithResultTransition implements FragmentTransition
 
 
     @Override
-    public void cleanup(@NonNull Context context, @NonNull FragmentManager fragmentManager, @NonNull MicroFragmentHost host, @NonNull MicroFragment previousStep)
+    public void cleanup(@NonNull Context context, @NonNull FragmentManager fragmentManager, @NonNull MicroFragmentHost host, @NonNull MicroFragment<?> previousStep)
     {
         // update Fragment arguments with the new environment
         Fragment fragment = fragmentManager.findFragmentById(R.id.microfragments_host);

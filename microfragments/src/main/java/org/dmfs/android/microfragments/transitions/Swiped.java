@@ -54,14 +54,14 @@ public final class Swiped implements FragmentTransition
 
 
     @Override
-    public void prepare(@NonNull Context context, @NonNull FragmentManager fragmentManager, @NonNull MicroFragmentHost host, @NonNull MicroFragment previousStep)
+    public void prepare(@NonNull Context context, @NonNull FragmentManager fragmentManager, @NonNull MicroFragmentHost host, @NonNull MicroFragment<?> previousStep)
     {
         mDelegate.prepare(context, fragmentManager, host, previousStep);
     }
 
     @NonNull
     @Override
-    public FragmentTransaction updateTransaction(@NonNull Context context, @NonNull FragmentTransaction fragmentTransaction, @NonNull FragmentManager fragmentManager, @NonNull MicroFragmentHost host, @NonNull MicroFragment previousStep)
+    public FragmentTransaction updateTransaction(@NonNull Context context, @NonNull FragmentTransaction fragmentTransaction, @NonNull FragmentManager fragmentManager, @NonNull MicroFragmentHost host, @NonNull MicroFragment<?> previousStep)
     {
         fragmentTransaction.setCustomAnimations(R.anim.microfragments_swipe_enter, R.anim.microfragments_swipe_exit, R.anim.microfragments_swipe_return,
                 R.anim.microfragments_swipe_back);
@@ -70,7 +70,7 @@ public final class Swiped implements FragmentTransition
 
 
     @Override
-    public void cleanup(@NonNull Context context, @NonNull FragmentManager fragmentManager, @NonNull MicroFragmentHost host, @NonNull MicroFragment previousStep)
+    public void cleanup(@NonNull Context context, @NonNull FragmentManager fragmentManager, @NonNull MicroFragmentHost host, @NonNull MicroFragment<?> previousStep)
     {
         mDelegate.cleanup(context, fragmentManager, host, previousStep);
     }

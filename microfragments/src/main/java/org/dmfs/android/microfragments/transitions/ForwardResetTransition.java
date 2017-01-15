@@ -81,7 +81,7 @@ public final class ForwardResetTransition implements FragmentTransition, Parcela
 
 
     @Override
-    public void prepare(@NonNull Context context, @NonNull FragmentManager fragmentManager, @NonNull MicroFragmentHost host, @NonNull MicroFragment previousStep)
+    public void prepare(@NonNull Context context, @NonNull FragmentManager fragmentManager, @NonNull MicroFragmentHost host, @NonNull MicroFragment<?> previousStep)
     {
         // insert an empty dummy fragment to enforce the animation that we want, otherwise the pop animation of the curent fragment would be played which is usually not what we want
         fragmentManager.beginTransaction()
@@ -96,7 +96,7 @@ public final class ForwardResetTransition implements FragmentTransition, Parcela
 
     @NonNull
     @Override
-    public FragmentTransaction updateTransaction(@NonNull Context context, @NonNull FragmentTransaction fragmentTransaction, @NonNull FragmentManager fragmentManager, @NonNull MicroFragmentHost host, @NonNull MicroFragment previousStep)
+    public FragmentTransaction updateTransaction(@NonNull Context context, @NonNull FragmentTransaction fragmentTransaction, @NonNull FragmentManager fragmentManager, @NonNull MicroFragmentHost host, @NonNull MicroFragment<?> previousStep)
     {
         fragmentTransaction.replace(R.id.microfragments_host, mNextStep.fragment(context, host));
         return fragmentTransaction;
@@ -104,7 +104,7 @@ public final class ForwardResetTransition implements FragmentTransition, Parcela
 
 
     @Override
-    public void cleanup(@NonNull Context context, @NonNull FragmentManager fragmentManager, @NonNull MicroFragmentHost host, @NonNull MicroFragment previousStep)
+    public void cleanup(@NonNull Context context, @NonNull FragmentManager fragmentManager, @NonNull MicroFragmentHost host, @NonNull MicroFragment<?> previousStep)
     {
         // nothing to be done
     }
