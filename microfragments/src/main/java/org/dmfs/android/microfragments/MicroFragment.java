@@ -59,7 +59,7 @@ public interface MicroFragment<T> extends Parcelable
     Fragment fragment(@NonNull Context context, @NonNull MicroFragmentHost host);
 
     @NonNull
-    T parameters();
+    T parameter();
 
     /**
      * True if this {@link MicroFragment} should be skipped when going back to the previous {@link MicroFragment}.

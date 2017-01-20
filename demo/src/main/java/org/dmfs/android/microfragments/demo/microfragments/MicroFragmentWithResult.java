@@ -28,7 +28,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.dmfs.android.microfragments.BasicMicroFragmentEnvironment;
 import org.dmfs.android.microfragments.FragmentEnvironment;
 import org.dmfs.android.microfragments.MicroFragment;
 import org.dmfs.android.microfragments.MicroFragmentEnvironment;
@@ -60,17 +59,13 @@ public final class MicroFragmentWithResult implements MicroFragment<Void>
     @Override
     public Fragment fragment(@NonNull Context context, @NonNull final MicroFragmentHost host)
     {
-        Fragment fragment = new Step2Fragment();
-        Bundle args = new Bundle();
-        args.putParcelable(ARG_ENVIRONMENT, new BasicMicroFragmentEnvironment<>(this, host));
-        fragment.setArguments(args);
-        return fragment;
+        return new Step2Fragment();
     }
 
 
     @NonNull
     @Override
-    public Void parameters()
+    public Void parameter()
     {
         return null;
     }
@@ -139,13 +134,6 @@ public final class MicroFragmentWithResult implements MicroFragment<Void>
             view.findViewById(android.R.id.button1).setOnClickListener(this);
             view.findViewById(android.R.id.button2).setOnClickListener(this);
             return view;
-        }
-
-
-        @Override
-        public void onStart()
-        {
-            super.onStart();
         }
 
 

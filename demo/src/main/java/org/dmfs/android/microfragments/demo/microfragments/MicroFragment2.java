@@ -29,7 +29,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import org.dmfs.android.microfragments.BasicMicroFragmentEnvironment;
 import org.dmfs.android.microfragments.FragmentEnvironment;
 import org.dmfs.android.microfragments.MicroFragment;
 import org.dmfs.android.microfragments.MicroFragmentEnvironment;
@@ -94,17 +93,13 @@ public final class MicroFragment2 implements MicroFragment<MicroFragment2.Step2P
     @Override
     public Fragment fragment(@NonNull Context context, @NonNull final MicroFragmentHost host)
     {
-        Fragment fragment = new Step2Fragment();
-        Bundle args = new Bundle();
-        args.putParcelable(ARG_ENVIRONMENT, new BasicMicroFragmentEnvironment<>(this, host));
-        fragment.setArguments(args);
-        return fragment;
+        return new Step2Fragment();
     }
 
 
     @NonNull
     @Override
-    public Step2Params parameters()
+    public Step2Params parameter()
     {
         return mParams;
     }
@@ -172,7 +167,7 @@ public final class MicroFragment2 implements MicroFragment<MicroFragment2.Step2P
             // Inflate the layout for this fragment
             View view = inflater.inflate(R.layout.fragment_step2, container, false);
             ((TextView) view.findViewById(R.id.text)).setText(
-                    mEnvironment.microFragment().parameters().name() + " " + mEnvironment.microFragment().parameters().uri().toASCIIString());
+                    mEnvironment.microFragment().parameter().name() + " " + mEnvironment.microFragment().parameter().uri().toASCIIString());
 
             view.findViewById(android.R.id.button1).setOnClickListener(this);
             view.findViewById(android.R.id.button2).setOnClickListener(this);
@@ -204,10 +199,10 @@ public final class MicroFragment2 implements MicroFragment<MicroFragment2.Step2P
                     environment.host().execute(getActivity(), new BackTransition());
                     break;
                 case android.R.id.button2:
-                    environment.host().execute(getActivity(), new Swiped(new ForwardTransition(new FinalLoaderMicroFragment())));
+                    environment.host().execute(getActivity(), new Swiped(new ForwardTransition<>(new FinalLoaderMicroFragment())));
                     break;
                 case android.R.id.button3:
-                    environment.host().execute(getActivity(), new Faded(new OverlayTransition(new MicroFragmentWithResult())));
+                    environment.host().execute(getActivity(), new Faded(new OverlayTransition<>(new MicroFragmentWithResult())));
                     break;
             }
         }

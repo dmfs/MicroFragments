@@ -28,7 +28,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import org.dmfs.android.microfragments.BasicMicroFragmentEnvironment;
 import org.dmfs.android.microfragments.FragmentEnvironment;
 import org.dmfs.android.microfragments.MicroFragment;
 import org.dmfs.android.microfragments.MicroFragmentEnvironment;
@@ -53,26 +52,25 @@ public final class MicroFragment1 implements MicroFragment<String>
     }
 
 
+    @NonNull
     @Override
-    public String title(Context context)
+    public String title(@NonNull Context context)
     {
         return mName;
     }
 
 
+    @NonNull
     @Override
     public Fragment fragment(@NonNull Context context, @NonNull MicroFragmentHost host)
     {
-        Fragment fragment = new Step1Fragment();
-        Bundle args = new Bundle();
-        args.putParcelable(ARG_ENVIRONMENT, new BasicMicroFragmentEnvironment<>(this, host));
-        fragment.setArguments(args);
-        return fragment;
+        return new Step1Fragment();
     }
 
 
+    @NonNull
     @Override
-    public String parameters()
+    public String parameter()
     {
         return mName;
     }
@@ -140,7 +138,7 @@ public final class MicroFragment1 implements MicroFragment<String>
             // Inflate the layout for this fragment
             View view = inflater.inflate(R.layout.fragment_step1, container, false);
 
-            ((TextView) view.findViewById(R.id.text)).setText(getActivity().getString(R.string.hello_fragment, mEnvironment.microFragment().parameters()));
+            ((TextView) view.findViewById(R.id.text)).setText(getActivity().getString(R.string.hello_fragment, mEnvironment.microFragment().parameter()));
             view.findViewById(android.R.id.button1).setOnClickListener(this);
             return view;
         }
@@ -150,7 +148,7 @@ public final class MicroFragment1 implements MicroFragment<String>
         public void onClick(View v)
         {
             MicroFragmentEnvironment<?> environment = getArguments().getParcelable(MicroFragment.ARG_ENVIRONMENT);
-            environment.host().execute(getActivity(), new Swiped(new ForwardTransition(new IntermediateLoaderMicroFragment())));
+            environment.host().execute(getActivity(), new Swiped(new ForwardTransition<>(new IntermediateLoaderMicroFragment())));
         }
     }
 

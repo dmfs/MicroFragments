@@ -28,7 +28,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.dmfs.android.microfragments.BasicMicroFragmentEnvironment;
 import org.dmfs.android.microfragments.FragmentEnvironment;
 import org.dmfs.android.microfragments.MicroFragment;
 import org.dmfs.android.microfragments.MicroFragmentHost;
@@ -45,7 +44,7 @@ import java.net.URI;
 public final class IntermediateLoaderMicroFragment implements MicroFragment<Void>
 {
     @Override
-    public String title(Context context)
+    public String title(@NonNull Context context)
     {
         return "Loading …";
     }
@@ -55,16 +54,13 @@ public final class IntermediateLoaderMicroFragment implements MicroFragment<Void
     @Override
     public Fragment fragment(@NonNull Context context, @NonNull MicroFragmentHost host)
     {
-        Fragment fragment = new LoadFragment();
-        Bundle args = new Bundle();
-        args.putParcelable(ARG_ENVIRONMENT, new BasicMicroFragmentEnvironment<>(this, host));
-        fragment.setArguments(args);
-        return fragment;
+        return new LoadFragment();
     }
 
 
+    @NonNull
     @Override
-    public Void parameters()
+    public Void parameter()
     {
         return null;
     }
@@ -114,13 +110,6 @@ public final class IntermediateLoaderMicroFragment implements MicroFragment<Void
         private final Handler mHandler = new Handler();
 
 
-        @Override
-        public void onCreate(@Nullable Bundle savedInstanceState)
-        {
-            super.onCreate(savedInstanceState);
-        }
-
-
         @Nullable
         @Override
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
@@ -156,7 +145,7 @@ public final class IntermediateLoaderMicroFragment implements MicroFragment<Void
                 {
                     new FragmentEnvironment<>(LoadFragment.this)
                             .host()
-                            .execute(getActivity(), new XFaded(new ForwardTransition(new MicroFragment2("Step2", URI.create("http://example.com")))));
+                            .execute(getActivity(), new XFaded(new ForwardTransition<>(new MicroFragment2("Step2", URI.create("http://example.com")))));
                 }
             }
         };

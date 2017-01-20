@@ -18,6 +18,7 @@
 package org.dmfs.android.microfragments.transitions;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.MainThread;
@@ -26,11 +27,14 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
+import org.dmfs.android.microfragments.BasicMicroFragmentEnvironment;
 import org.dmfs.android.microfragments.MicroFragment;
 import org.dmfs.android.microfragments.MicroFragmentHost;
 import org.dmfs.android.microfragments.R;
 import org.dmfs.android.microfragments.Timestamp;
 import org.dmfs.android.microfragments.timestamps.UiTimestamp;
+
+import static org.dmfs.android.microfragments.MicroFragment.ARG_ENVIRONMENT;
 
 
 /**
@@ -40,9 +44,9 @@ import org.dmfs.android.microfragments.timestamps.UiTimestamp;
  *
  * @author Marten Gajda
  */
-public final class ForwardResetTransition implements FragmentTransition, Parcelable
+public final class ForwardResetTransition<T> implements FragmentTransition, Parcelable
 {
-    private final MicroFragment mNextStep;
+    private final MicroFragment<T> mNextStep;
     private final Timestamp mTimestamp;
 
 
@@ -53,7 +57,7 @@ public final class ForwardResetTransition implements FragmentTransition, Parcela
      *         The initial {@link MicroFragment}.
      */
     @MainThread
-    public ForwardResetTransition(@NonNull MicroFragment nextStep)
+    public ForwardResetTransition(@NonNull MicroFragment<T> nextStep)
     {
         this(nextStep, new UiTimestamp());
     }
@@ -65,7 +69,7 @@ public final class ForwardResetTransition implements FragmentTransition, Parcela
      * @param nextStep
      *         The initial {@link MicroFragment}.
      */
-    public ForwardResetTransition(@NonNull MicroFragment nextStep, @NonNull Timestamp timestamp)
+    public ForwardResetTransition(@NonNull MicroFragment<T> nextStep, @NonNull Timestamp timestamp)
     {
         mNextStep = nextStep;
         mTimestamp = timestamp;
@@ -98,7 +102,12 @@ public final class ForwardResetTransition implements FragmentTransition, Parcela
     @Override
     public FragmentTransaction updateTransaction(@NonNull Context context, @NonNull FragmentTransaction fragmentTransaction, @NonNull FragmentManager fragmentManager, @NonNull MicroFragmentHost host, @NonNull MicroFragment<?> previousStep)
     {
-        fragmentTransaction.replace(R.id.microfragments_host, mNextStep.fragment(context, host));
+        Fragment fragment = mNextStep.fragment(context, host);
+        Bundle args = new Bundle(1);
+        args.putParcelable(ARG_ENVIRONMENT, new BasicMicroFragmentEnvironment<>(mNextStep, host));
+        fragment.setArguments(args);
+
+        fragmentTransaction.replace(R.id.microfragments_host, fragment);
         return fragmentTransaction;
     }
 
@@ -132,7 +141,7 @@ public final class ForwardResetTransition implements FragmentTransition, Parcela
             ClassLoader loader = getClass().getClassLoader();
             MicroFragment<?> microFragment = source.readParcelable(loader);
             Timestamp timestamp = source.readParcelable(loader);
-            return new ForwardResetTransition(microFragment, timestamp);
+            return new ForwardResetTransition<>(microFragment, timestamp);
         }
 
 

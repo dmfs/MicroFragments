@@ -39,6 +39,8 @@ import org.dmfs.pigeonpost.localbroadcast.ParcelableDovecote;
 
 import java.util.LinkedList;
 
+import static org.dmfs.android.microfragments.MicroFragment.ARG_ENVIRONMENT;
+
 
 /**
  * A {@link Fragment} to host a {@link MicroFragmentFlow}.
@@ -86,10 +88,16 @@ public final class HostFragment extends Fragment implements FragmentManager.OnBa
         mInstanceStateSaved = false;
         if (currentFragment() == null)
         {
+            MicroFragmentHost host = new BasicMicroFragmentHost(mOperationDoveCote.cage());
+            MicroFragment<?> initialMicroFragment = (getArguments().getParcelable("INITIAL_MICRO_FRAGMENT"));
+            Fragment initialFragment = initialMicroFragment.fragment(getActivity(), host);
+
+            Bundle args = new Bundle(1);
+            args.putParcelable(ARG_ENVIRONMENT, new BasicMicroFragmentEnvironment<>(initialMicroFragment, host));
+            initialFragment.setArguments(args);
+
             mFragmentManager.beginTransaction()
-                    .add(R.id.microfragments_host,
-                            ((MicroFragment<?>) getArguments().getParcelable("INITIAL_MICRO_FRAGMENT")).fragment(getActivity(),
-                                    new BasicMicroFragmentHost(mOperationDoveCote.cage())))
+                    .add(R.id.microfragments_host, initialFragment)
                     .commit();
         }
         else

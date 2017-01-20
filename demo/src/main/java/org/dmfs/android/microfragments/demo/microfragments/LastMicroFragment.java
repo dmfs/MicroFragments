@@ -26,7 +26,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.dmfs.android.microfragments.BasicMicroFragmentEnvironment;
 import org.dmfs.android.microfragments.MicroFragmentHost;
 import org.dmfs.android.microfragments.demo.R;
 
@@ -37,7 +36,7 @@ import org.dmfs.android.microfragments.demo.R;
 public final class LastMicroFragment implements org.dmfs.android.microfragments.MicroFragment<Void>
 {
     @Override
-    public String title(Context context)
+    public String title(@NonNull Context context)
     {
         return "Last Step";
     }
@@ -47,16 +46,13 @@ public final class LastMicroFragment implements org.dmfs.android.microfragments.
     @Override
     public Fragment fragment(@NonNull Context context, @NonNull MicroFragmentHost host)
     {
-        Fragment fragment = new Step1Fragment();
-        Bundle args = new Bundle();
-        args.putParcelable(ARG_ENVIRONMENT, new BasicMicroFragmentEnvironment<>(this, host));
-        fragment.setArguments(args);
-        return fragment;
+        return new Step1Fragment();
     }
 
 
+    @NonNull
     @Override
-    public Void parameters()
+    public Void parameter()
     {
         return null;
     }

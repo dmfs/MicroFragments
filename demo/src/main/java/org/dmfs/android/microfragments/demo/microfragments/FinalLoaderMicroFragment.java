@@ -27,7 +27,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.dmfs.android.microfragments.BasicMicroFragmentEnvironment;
 import org.dmfs.android.microfragments.FragmentEnvironment;
 import org.dmfs.android.microfragments.MicroFragment;
 import org.dmfs.android.microfragments.MicroFragmentHost;
@@ -44,7 +43,7 @@ import org.dmfs.android.microfragments.transitions.Swiped;
 public final class FinalLoaderMicroFragment implements MicroFragment<Void>
 {
     @Override
-    public String title(Context context)
+    public String title(@NonNull Context context)
     {
         return "Loading again …";
     }
@@ -54,16 +53,13 @@ public final class FinalLoaderMicroFragment implements MicroFragment<Void>
     @Override
     public Fragment fragment(@NonNull Context context, @NonNull MicroFragmentHost host)
     {
-        Fragment fragment = new LoadFragment();
-        Bundle args = new Bundle();
-        args.putParcelable(ARG_ENVIRONMENT, new BasicMicroFragmentEnvironment<>(this, host));
-        fragment.setArguments(args);
-        return fragment;
+        return new LoadFragment();
     }
 
 
+    @NonNull
     @Override
-    public Void parameters()
+    public Void parameter()
     {
         return null;
     }
