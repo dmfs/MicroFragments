@@ -18,23 +18,19 @@
 package org.dmfs.android.microfragments.transitions;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
 import org.dmfs.android.microfragments.MicroFragment;
-import org.dmfs.android.microfragments.MicroFragmentEnvironment;
 import org.dmfs.android.microfragments.MicroFragmentHost;
-import org.dmfs.android.microfragments.R;
 import org.dmfs.android.microfragments.Timestamp;
-import org.dmfs.android.microfragments.WithResult;
 import org.dmfs.android.microfragments.timestamps.UiTimestamp;
+import org.dmfs.pigeonpost.Cage;
 
 
 /**
@@ -42,29 +38,34 @@ import org.dmfs.android.microfragments.timestamps.UiTimestamp;
  *
  * @author Marten Gajda
  */
-public final class BackWithResultTransition implements FragmentTransition
+public final class BackWithResultTransition<T extends Parcelable> implements FragmentTransition
 {
+    @NonNull
+    private final Cage<T> mCage;
 
-    private final Parcelable mResult;
-
+    @NonNull
     private final Timestamp mTimestamp;
+
+    @Nullable
+    private final T mResult;
 
 
     /**
      * Creates a {@link FragmentTransition} that goes back to the previous {@link MicroFragment}.
      */
     @MainThread
-    public BackWithResultTransition(@Nullable Parcelable result)
+    public BackWithResultTransition(@NonNull Cage<T> cage, @Nullable T result)
     {
-        this(result, new UiTimestamp());
+        this(cage, result, new UiTimestamp());
     }
 
 
     /**
      * Creates a {@link FragmentTransition} that goes back to the previous {@link MicroFragment}.
      */
-    public BackWithResultTransition(@Nullable Parcelable result, @NonNull Timestamp timestamp)
+    public BackWithResultTransition(@NonNull Cage<T> cage, @Nullable T result, @NonNull Timestamp timestamp)
     {
+        mCage = cage;
         mResult = result;
         mTimestamp = timestamp;
     }
@@ -97,14 +98,7 @@ public final class BackWithResultTransition implements FragmentTransition
     @Override
     public void cleanup(@NonNull Context context, @NonNull FragmentManager fragmentManager, @NonNull MicroFragmentHost host, @NonNull MicroFragment<?> previousStep)
     {
-        // update Fragment arguments with the new environment
-        Fragment fragment = fragmentManager.findFragmentById(R.id.microfragments_host);
-        Bundle args = fragment.getArguments();
-        // wow, what a hack! Since we can't call setArguments we just modify the arguments the Fragment already has. Can't believe that even works, but it seems to be the only solution.
-        args.putParcelable(MicroFragment.ARG_ENVIRONMENT,
-                new WithResult((MicroFragmentEnvironment) args.getParcelable(MicroFragment.ARG_ENVIRONMENT), mResult));
-        // TODO: calling onResume is not acceptable
-        fragment.onResume();
+        mCage.pigeon(mResult).send(context);
     }
 
 
@@ -118,6 +112,7 @@ public final class BackWithResultTransition implements FragmentTransition
     @Override
     public void writeToParcel(Parcel dest, int flags)
     {
+        dest.writeParcelable(mCage, flags);
         dest.writeParcelable(mResult, flags);
         dest.writeParcelable(mTimestamp, flags);
     }
@@ -129,7 +124,8 @@ public final class BackWithResultTransition implements FragmentTransition
         public BackWithResultTransition createFromParcel(Parcel source)
         {
             ClassLoader classLoader = getClass().getClassLoader();
-            return new BackWithResultTransition(source.readParcelable(classLoader), (Timestamp) source.readParcelable(classLoader));
+            return new BackWithResultTransition<>((Cage) source.readParcelable(classLoader), source.readParcelable(classLoader),
+                    (Timestamp) source.readParcelable(classLoader));
         }
 
 

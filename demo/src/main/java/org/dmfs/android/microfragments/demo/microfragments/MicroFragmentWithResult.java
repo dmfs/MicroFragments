@@ -34,16 +34,21 @@ import org.dmfs.android.microfragments.MicroFragmentEnvironment;
 import org.dmfs.android.microfragments.MicroFragmentHost;
 import org.dmfs.android.microfragments.demo.R;
 import org.dmfs.android.microfragments.transitions.BackWithResultTransition;
+import org.dmfs.pigeonpost.Cage;
 
 
 /**
  * Created by marten on 09.12.16.
  */
-public final class MicroFragmentWithResult implements MicroFragment<Void>
+public final class MicroFragmentWithResult implements MicroFragment<Cage<MicroFragmentWithResult.ResultType>>
 {
 
-    public MicroFragmentWithResult()
+    private final Cage<ResultType> mCage;
+
+
+    public MicroFragmentWithResult(Cage<ResultType> cage)
     {
+        mCage = cage;
     }
 
 
@@ -65,9 +70,9 @@ public final class MicroFragmentWithResult implements MicroFragment<Void>
 
     @NonNull
     @Override
-    public Void parameter()
+    public Cage<ResultType> parameter()
     {
-        return null;
+        return mCage;
     }
 
 
@@ -96,7 +101,7 @@ public final class MicroFragmentWithResult implements MicroFragment<Void>
         @Override
         public MicroFragmentWithResult createFromParcel(Parcel source)
         {
-            return new MicroFragmentWithResult();
+            return new MicroFragmentWithResult((Cage<ResultType>) source.readParcelable(getClass().getClassLoader()));
         }
 
 
@@ -113,7 +118,7 @@ public final class MicroFragmentWithResult implements MicroFragment<Void>
      */
     public static class Step2Fragment extends Fragment implements View.OnClickListener
     {
-        private MicroFragmentEnvironment<Void> mEnvironment;
+        private MicroFragmentEnvironment<Cage<ResultType>> mEnvironment;
 
 
         @Override
@@ -144,10 +149,12 @@ public final class MicroFragmentWithResult implements MicroFragment<Void>
             switch (v.getId())
             {
                 case android.R.id.button1:
-                    environment.host().execute(getActivity(), new BackWithResultTransition(new ResultType("RESULT1")));
+                    environment.host()
+                            .execute(getActivity(), new BackWithResultTransition<>(mEnvironment.microFragment().parameter(), new ResultType("RESULT1")));
                     break;
                 case android.R.id.button2:
-                    environment.host().execute(getActivity(), new BackWithResultTransition(new ResultType("result2")));
+                    environment.host()
+                            .execute(getActivity(), new BackWithResultTransition<>(mEnvironment.microFragment().parameter(), new ResultType("result2")));
                     break;
             }
         }

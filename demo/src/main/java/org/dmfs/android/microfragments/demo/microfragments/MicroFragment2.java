@@ -35,10 +35,12 @@ import org.dmfs.android.microfragments.MicroFragmentEnvironment;
 import org.dmfs.android.microfragments.MicroFragmentHost;
 import org.dmfs.android.microfragments.demo.R;
 import org.dmfs.android.microfragments.transitions.BackTransition;
-import org.dmfs.android.microfragments.transitions.Faded;
+import org.dmfs.android.microfragments.transitions.BottomUp;
 import org.dmfs.android.microfragments.transitions.ForwardTransition;
 import org.dmfs.android.microfragments.transitions.OverlayTransition;
 import org.dmfs.android.microfragments.transitions.Swiped;
+import org.dmfs.pigeonpost.Dovecote;
+import org.dmfs.pigeonpost.localbroadcast.ParcelableDovecote;
 
 import java.net.URI;
 
@@ -147,9 +149,10 @@ public final class MicroFragment2 implements MicroFragment<MicroFragment2.Step2P
     /**
      * A simple {@link Fragment} subclass.
      */
-    public static class Step2Fragment extends Fragment implements View.OnClickListener
+    public static class Step2Fragment extends Fragment implements View.OnClickListener, Dovecote.OnPigeonReturnCallback<MicroFragmentWithResult.ResultType>
     {
         private MicroFragmentEnvironment<Step2Params> mEnvironment;
+        private Dovecote<MicroFragmentWithResult.ResultType> mDoveCote;
 
 
         @Override
@@ -157,6 +160,7 @@ public final class MicroFragment2 implements MicroFragment<MicroFragment2.Step2P
         {
             super.onCreate(savedInstanceState);
             mEnvironment = new FragmentEnvironment<>(this);
+            mDoveCote = new ParcelableDovecote<>(getActivity(), "step2result", this);
         }
 
 
@@ -177,15 +181,10 @@ public final class MicroFragment2 implements MicroFragment<MicroFragment2.Step2P
 
 
         @Override
-        public void onResume()
+        public void onDestroy()
         {
-            mEnvironment = getArguments().getParcelable(MicroFragment.ARG_ENVIRONMENT);
-            super.onResume();
-            MicroFragmentWithResult.ResultType result = (MicroFragmentWithResult.ResultType) mEnvironment.result();
-            if (result != null)
-            {
-                Snackbar.make(getView(), String.format("Result was %s", result.toString()), Snackbar.LENGTH_LONG).show();
-            }
+            mDoveCote.dispose();
+            super.onDestroy();
         }
 
 
@@ -202,10 +201,19 @@ public final class MicroFragment2 implements MicroFragment<MicroFragment2.Step2P
                     environment.host().execute(getActivity(), new Swiped(new ForwardTransition<>(new FinalLoaderMicroFragment())));
                     break;
                 case android.R.id.button3:
-                    environment.host().execute(getActivity(), new Faded(new OverlayTransition<>(new MicroFragmentWithResult())));
+                    environment.host().execute(getActivity(), new BottomUp(new OverlayTransition<>(new MicroFragmentWithResult(mDoveCote.cage()))));
                     break;
             }
         }
 
+
+        @Override
+        public void onPigeonReturn(@NonNull MicroFragmentWithResult.ResultType result)
+        {
+            if (result != null)
+            {
+                Snackbar.make(getView(), String.format("Result was %s", result.toString()), Snackbar.LENGTH_LONG).show();
+            }
+        }
     }
 }
