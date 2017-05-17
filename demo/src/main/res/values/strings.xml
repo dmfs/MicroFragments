@@ -1,7 +1,8 @@
 <resources>
-    <string name="app_name">Dumbledore</string>
-    <string name="title_activity_wand_demo">Dumbledore Demo Activity</string>
+    <string name="app_name">MicroFragments Demo</string>
+    <string name="title_activity_wand_demo">MicroFragments Demo Activity</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello_fragment">Hello %1$s fragment</string>
 </resources>
