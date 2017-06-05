@@ -83,6 +83,12 @@ public final class BackWithResultTransition<T extends Parcelable> implements Fra
     public void prepare(@NonNull Context context, @NonNull FragmentManager fragmentManager, @NonNull MicroFragmentHost host, @NonNull MicroFragment<?> previousStep)
     {
         fragmentManager.popBackStackImmediate();
+        // make sure we also skip all skipable steps.
+        if (fragmentManager.getBackStackEntryCount() > 0
+                && "skip".equals(fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 1).getName()))
+        {
+            fragmentManager.popBackStackImmediate("skip", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        }
     }
 
 
