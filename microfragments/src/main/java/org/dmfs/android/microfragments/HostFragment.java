@@ -154,15 +154,6 @@ public final class HostFragment extends Fragment implements FragmentManager.OnBa
     @Override
     public void onBackStackChanged()
     {
-        if (mFragmentManager.getBackStackEntryCount() < mBackStackDepth)
-        {
-            // the user went back, make sure we skip all skipable steps.
-            if (mFragmentManager.getBackStackEntryCount() > 0
-                    && "skip".equals(mFragmentManager.getBackStackEntryAt(mFragmentManager.getBackStackEntryCount() - 1).getName()))
-            {
-                mFragmentManager.popBackStackImmediate("skip", FragmentManager.POP_BACK_STACK_INCLUSIVE);
-            }
-        }
         mBackStackDepth = mFragmentManager.getBackStackEntryCount();
 
         postUpdate(new FragmentEnvironment<>(currentFragment()).microFragment());
