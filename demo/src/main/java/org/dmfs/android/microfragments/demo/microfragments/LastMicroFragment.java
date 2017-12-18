@@ -35,10 +35,20 @@ import org.dmfs.android.microfragments.demo.R;
  */
 public final class LastMicroFragment implements org.dmfs.android.microfragments.MicroFragment<Void>
 {
+    private final String mName;
+
+
+    public LastMicroFragment(String name)
+    {
+        mName = name;
+    }
+
+
+    @NonNull
     @Override
     public String title(@NonNull Context context)
     {
-        return "Last Step";
+        return mName;
     }
 
 
@@ -75,7 +85,7 @@ public final class LastMicroFragment implements org.dmfs.android.microfragments.
     @Override
     public void writeToParcel(Parcel dest, int flags)
     {
-
+        dest.writeString(mName);
     }
 
 
@@ -84,7 +94,7 @@ public final class LastMicroFragment implements org.dmfs.android.microfragments.
         @Override
         public LastMicroFragment createFromParcel(Parcel source)
         {
-            return new LastMicroFragment();
+            return new LastMicroFragment(source.readString());
         }
 
 

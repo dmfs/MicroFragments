@@ -25,9 +25,14 @@ import android.support.v7.widget.Toolbar;
 import org.dmfs.android.microfragments.MicroFragmentHost;
 import org.dmfs.android.microfragments.MicroFragmentState;
 import org.dmfs.android.microfragments.SimpleMicroFragmentFlow;
-import org.dmfs.android.microfragments.demo.microfragments.MicroFragment1;
+import org.dmfs.android.microfragments.demo.steps.FinalLoaderStep;
+import org.dmfs.android.microfragments.demo.steps.FinalStep;
+import org.dmfs.android.microfragments.demo.steps.InitialStep;
+import org.dmfs.android.microfragments.demo.steps.LoaderStep1;
+import org.dmfs.android.microfragments.demo.steps.Step2;
 import org.dmfs.android.microfragments.transitions.BackTransition;
 import org.dmfs.android.microfragments.utils.BooleanDovecote;
+import org.dmfs.android.microwizard.MicroWizard;
 import org.dmfs.pigeonpost.Dovecote;
 import org.dmfs.pigeonpost.localbroadcast.ParcelableDovecote;
 
@@ -62,7 +67,13 @@ public final class MicroFragmentsDemoActivity extends AppCompatActivity implemen
 
         if (savedInstanceState == null)
         {
-            mMicroFragmentHost = new SimpleMicroFragmentFlow(new MicroFragment1("Step1"), R.id.wizard_host).withPigeonCage(mDovecote.cage()).start(this);
+            // Declare the microWizard.
+            MicroWizard<?> microWizard = new InitialStep(new LoaderStep1(new Step2(new FinalLoaderStep(new FinalStep()))));
+
+            mMicroFragmentHost = new SimpleMicroFragmentFlow(
+                    microWizard.microFragment(this, null),
+                    R.id.wizard_host).withPigeonCage(
+                    mDovecote.cage()).start(this);
         }
         else
         {

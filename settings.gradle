@@ -1,1 +1,1 @@
-include ':demo', ':microfragments'
+include ':demo', ':microfragments', ':microwizard'

@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/MicroFragments.iml" filepath="$PROJECT_DIR$/MicroFragments.iml" />
       <module fileurl="file://$PROJECT_DIR$/demo/demo.iml" filepath="$PROJECT_DIR$/demo/demo.iml" />
       <module fileurl="file://$PROJECT_DIR$/microfragments/microfragments.iml" filepath="$PROJECT_DIR$/microfragments/microfragments.iml" />
+      <module fileurl="file://$PROJECT_DIR$/microwizard/microwizard.iml" filepath="$PROJECT_DIR$/microwizard/microwizard.iml" />
     </modules>
   </component>
 </project>

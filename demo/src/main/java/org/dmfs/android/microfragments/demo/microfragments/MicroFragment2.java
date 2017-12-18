@@ -39,6 +39,8 @@ import org.dmfs.android.microfragments.transitions.BottomUp;
 import org.dmfs.android.microfragments.transitions.ForwardTransition;
 import org.dmfs.android.microfragments.transitions.OverlayTransition;
 import org.dmfs.android.microfragments.transitions.Swiped;
+import org.dmfs.android.microwizard.MicroWizard;
+import org.dmfs.android.microwizard.tools.Unboxed;
 import org.dmfs.pigeonpost.Dovecote;
 import org.dmfs.pigeonpost.localbroadcast.ParcelableDovecote;
 
@@ -56,13 +58,15 @@ public final class MicroFragment2 implements MicroFragment<MicroFragment2.Step2P
         String name();
 
         URI uri();
+
+        MicroWizard<URI> next();
     }
 
 
     private final Step2Params mParams;
 
 
-    public MicroFragment2(final String name, final URI uri)
+    public MicroFragment2(final String name, final URI uri, final MicroWizard<URI> next)
     {
         mParams = new Step2Params()
         {
@@ -78,6 +82,13 @@ public final class MicroFragment2 implements MicroFragment<MicroFragment2.Step2P
             public URI uri()
             {
                 return uri;
+            }
+
+
+            @Override
+            public MicroWizard<URI> next()
+            {
+                return next;
             }
         };
     }
@@ -126,6 +137,7 @@ public final class MicroFragment2 implements MicroFragment<MicroFragment2.Step2P
     {
         dest.writeString(mParams.name());
         dest.writeSerializable(mParams.uri());
+        dest.writeParcelable(mParams.next().boxed(), flags);
     }
 
 
@@ -134,7 +146,7 @@ public final class MicroFragment2 implements MicroFragment<MicroFragment2.Step2P
         @Override
         public MicroFragment2 createFromParcel(Parcel source)
         {
-            return new MicroFragment2(source.readString(), (URI) source.readSerializable());
+            return new MicroFragment2(source.readString(), (URI) source.readSerializable(), new Unboxed<MicroWizard<URI>>(source).value());
         }
 
 
@@ -191,14 +203,20 @@ public final class MicroFragment2 implements MicroFragment<MicroFragment2.Step2P
         @Override
         public void onClick(View v)
         {
-            MicroFragmentEnvironment<?> environment = getArguments().getParcelable(MicroFragment.ARG_ENVIRONMENT);
+            MicroFragmentEnvironment<Step2Params> environment = getArguments().getParcelable(MicroFragment.ARG_ENVIRONMENT);
             switch (v.getId())
             {
                 case android.R.id.button1:
                     environment.host().execute(getActivity(), new BackTransition());
                     break;
                 case android.R.id.button2:
-                    environment.host().execute(getActivity(), new Swiped(new ForwardTransition<>(new FinalLoaderMicroFragment())));
+                    environment.host()
+                            .execute(getActivity(),
+                                    new Swiped(
+                                            new ForwardTransition<>(environment.microFragment()
+                                                    .parameter()
+                                                    .next()
+                                                    .microFragment(getActivity(), mEnvironment.microFragment().parameter().uri()))));
                     break;
                 case android.R.id.button3:
                     environment.host().execute(getActivity(), new BottomUp(new OverlayTransition<>(new MicroFragmentWithResult(mDoveCote.cage()))));
