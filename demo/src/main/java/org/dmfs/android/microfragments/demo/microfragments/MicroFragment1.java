@@ -35,20 +35,44 @@ import org.dmfs.android.microfragments.MicroFragmentHost;
 import org.dmfs.android.microfragments.demo.R;
 import org.dmfs.android.microfragments.transitions.ForwardTransition;
 import org.dmfs.android.microfragments.transitions.Swiped;
+import org.dmfs.android.microwizard.MicroWizard;
+import org.dmfs.android.microwizard.tools.Unboxed;
 
 
 /**
  * Created by marten on 09.12.16.
  */
-public final class MicroFragment1 implements MicroFragment<String>
+public final class MicroFragment1 implements MicroFragment<MicroFragment1.Params>
 {
 
-    private final String mName;
+    private final Params mParams;
 
 
-    public MicroFragment1(String name)
+    public interface Params
     {
-        mName = name;
+        String name();
+
+        MicroWizard<Integer> nextStep();
+    }
+
+
+    public MicroFragment1(final String name, final MicroWizard<Integer> nextStep)
+    {
+        mParams = new Params()
+        {
+            @Override
+            public String name()
+            {
+                return name;
+            }
+
+
+            @Override
+            public MicroWizard<Integer> nextStep()
+            {
+                return nextStep;
+            }
+        };
     }
 
 
@@ -56,7 +80,7 @@ public final class MicroFragment1 implements MicroFragment<String>
     @Override
     public String title(@NonNull Context context)
     {
-        return mName;
+        return mParams.name();
     }
 
 
@@ -70,9 +94,9 @@ public final class MicroFragment1 implements MicroFragment<String>
 
     @NonNull
     @Override
-    public String parameter()
+    public Params parameter()
     {
-        return mName;
+        return mParams;
     }
 
 
@@ -93,7 +117,8 @@ public final class MicroFragment1 implements MicroFragment<String>
     @Override
     public void writeToParcel(Parcel dest, int flags)
     {
-        dest.writeString(mName);
+        dest.writeString(mParams.name());
+        dest.writeParcelable(mParams.nextStep().boxed(), flags);
     }
 
 
@@ -102,7 +127,7 @@ public final class MicroFragment1 implements MicroFragment<String>
         @Override
         public MicroFragment1 createFromParcel(Parcel source)
         {
-            return new MicroFragment1(source.readString());
+            return new MicroFragment1(source.readString(), new Unboxed<MicroWizard<Integer>>(source).value());
         }
 
 
@@ -120,7 +145,7 @@ public final class MicroFragment1 implements MicroFragment<String>
     public static class Step1Fragment extends Fragment implements View.OnClickListener
     {
 
-        private MicroFragmentEnvironment<String> mEnvironment;
+        private MicroFragmentEnvironment<Params> mEnvironment;
 
 
         @Override
@@ -132,13 +157,13 @@ public final class MicroFragment1 implements MicroFragment<String>
 
 
         @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState)
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
             // Inflate the layout for this fragment
             View view = inflater.inflate(R.layout.fragment_step1, container, false);
 
-            ((TextView) view.findViewById(R.id.text)).setText(getActivity().getString(R.string.hello_fragment, mEnvironment.microFragment().parameter()));
+            ((TextView) view.findViewById(R.id.text)).setText(
+                    getActivity().getString(R.string.hello_fragment, mEnvironment.microFragment().parameter().name()));
             view.findViewById(android.R.id.button1).setOnClickListener(this);
             return view;
         }
@@ -147,8 +172,10 @@ public final class MicroFragment1 implements MicroFragment<String>
         @Override
         public void onClick(View v)
         {
-            MicroFragmentEnvironment<?> environment = getArguments().getParcelable(MicroFragment.ARG_ENVIRONMENT);
-            environment.host().execute(getActivity(), new Swiped(new ForwardTransition<>(new IntermediateLoaderMicroFragment())));
+            MicroFragmentEnvironment<Params> environment = getArguments().getParcelable(MicroFragment.ARG_ENVIRONMENT);
+            environment.host()
+                    .execute(getActivity(),
+                            new Swiped(new ForwardTransition<>(environment.microFragment().parameter().nextStep().microFragment(getContext(), 1))));
         }
     }
 
