@@ -29,19 +29,55 @@ import android.view.ViewGroup;
 
 import org.dmfs.android.microfragments.FragmentEnvironment;
 import org.dmfs.android.microfragments.MicroFragment;
+import org.dmfs.android.microfragments.MicroFragmentEnvironment;
 import org.dmfs.android.microfragments.MicroFragmentHost;
 import org.dmfs.android.microfragments.Timestamp;
 import org.dmfs.android.microfragments.demo.R;
 import org.dmfs.android.microfragments.timestamps.UiTimestamp;
 import org.dmfs.android.microfragments.transitions.ForwardResetTransition;
 import org.dmfs.android.microfragments.transitions.Swiped;
+import org.dmfs.android.microwizard.box.Unboxed;
+import org.dmfs.android.microwizard.MicroWizard;
+
+import java.net.URI;
 
 
 /**
  * @author Marten Gajda
  */
-public final class FinalLoaderMicroFragment implements MicroFragment<Void>
+public final class FinalLoaderMicroFragment implements MicroFragment<FinalLoaderMicroFragment.Params>
 {
+    private final Params mArguments;
+
+
+    public interface Params
+    {
+        URI uri();
+
+        MicroWizard<String> next();
+    }
+
+
+    public FinalLoaderMicroFragment(URI uri, MicroWizard<String> next)
+    {
+        mArguments = new Params()
+        {
+            @Override
+            public URI uri()
+            {
+                return uri;
+            }
+
+
+            @Override
+            public MicroWizard<String> next()
+            {
+                return next;
+            }
+        };
+    }
+
+
     @Override
     public String title(@NonNull Context context)
     {
@@ -59,9 +95,9 @@ public final class FinalLoaderMicroFragment implements MicroFragment<Void>
 
     @NonNull
     @Override
-    public Void parameter()
+    public Params parameter()
     {
-        return null;
+        return mArguments;
     }
 
 
@@ -82,7 +118,8 @@ public final class FinalLoaderMicroFragment implements MicroFragment<Void>
     @Override
     public void writeToParcel(Parcel dest, int flags)
     {
-
+        dest.writeSerializable(mArguments.uri());
+        dest.writeParcelable(mArguments.next().boxed(), flags);
     }
 
 
@@ -91,7 +128,7 @@ public final class FinalLoaderMicroFragment implements MicroFragment<Void>
         @Override
         public FinalLoaderMicroFragment createFromParcel(Parcel source)
         {
-            return new FinalLoaderMicroFragment();
+            return new FinalLoaderMicroFragment((URI) source.readSerializable(), new Unboxed<MicroWizard<String>>(source).value());
         }
 
 
@@ -158,9 +195,11 @@ public final class FinalLoaderMicroFragment implements MicroFragment<Void>
 
                 if (isResumed())
                 {
-                    new FragmentEnvironment<>(LoadFragment.this)
-                            .host()
-                            .execute(getActivity(), new Swiped(new ForwardResetTransition(new LastMicroFragment(), mTimestamp)));
+                    MicroFragmentEnvironment<Params> environment = new FragmentEnvironment<>(LoadFragment.this);
+                    environment.host()
+                            .execute(getActivity(), new Swiped(
+                                    new ForwardResetTransition<>(environment.microFragment().parameter().next().microFragment(getActivity(), "Result"),
+                                            mTimestamp)));
                 }
             }
         }

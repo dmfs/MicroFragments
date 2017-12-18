@@ -34,6 +34,8 @@ import org.dmfs.android.microfragments.MicroFragmentHost;
 import org.dmfs.android.microfragments.demo.R;
 import org.dmfs.android.microfragments.transitions.ForwardTransition;
 import org.dmfs.android.microfragments.transitions.XFaded;
+import org.dmfs.android.microwizard.MicroWizard;
+import org.dmfs.android.microwizard.box.Unboxed;
 
 import java.net.URI;
 
@@ -41,8 +43,39 @@ import java.net.URI;
 /**
  * @author Marten Gajda
  */
-public final class IntermediateLoaderMicroFragment implements MicroFragment<Void>
+public final class IntermediateLoaderMicroFragment implements MicroFragment<IntermediateLoaderMicroFragment.Params>
 {
+    private final Params mArgument;
+
+
+    public interface Params
+    {
+        Integer data();
+
+        MicroWizard<URI> nextStep();
+    }
+
+
+    public IntermediateLoaderMicroFragment(final Integer argument, final MicroWizard<URI> mNext)
+    {
+        mArgument = new Params()
+        {
+            @Override
+            public Integer data()
+            {
+                return argument;
+            }
+
+
+            @Override
+            public MicroWizard<URI> nextStep()
+            {
+                return mNext;
+            }
+        };
+    }
+
+
     @Override
     public String title(@NonNull Context context)
     {
@@ -60,9 +93,9 @@ public final class IntermediateLoaderMicroFragment implements MicroFragment<Void
 
     @NonNull
     @Override
-    public Void parameter()
+    public Params parameter()
     {
-        return null;
+        return mArgument;
     }
 
 
@@ -83,7 +116,8 @@ public final class IntermediateLoaderMicroFragment implements MicroFragment<Void
     @Override
     public void writeToParcel(Parcel dest, int flags)
     {
-
+        dest.writeInt(mArgument.data());
+        dest.writeParcelable(mArgument.nextStep().boxed(), flags);
     }
 
 
@@ -92,7 +126,8 @@ public final class IntermediateLoaderMicroFragment implements MicroFragment<Void
         @Override
         public IntermediateLoaderMicroFragment createFromParcel(Parcel source)
         {
-            return new IntermediateLoaderMicroFragment();
+            return new IntermediateLoaderMicroFragment(source.readInt(),
+                    new Unboxed<MicroWizard<URI>>(source).value());
         }
 
 
@@ -145,7 +180,11 @@ public final class IntermediateLoaderMicroFragment implements MicroFragment<Void
                 {
                     new FragmentEnvironment<>(LoadFragment.this)
                             .host()
-                            .execute(getActivity(), new XFaded(new ForwardTransition<>(new MicroFragment2("Step2", URI.create("http://example.com")))));
+                            .execute(getActivity(), new XFaded(new ForwardTransition<>(
+                                    new FragmentEnvironment<Params>(LoadFragment.this).microFragment()
+                                            .parameter()
+                                            .nextStep()
+                                            .microFragment(getContext(), URI.create("https://example.com")))));
                 }
             }
         };
