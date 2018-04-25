@@ -17,12 +17,12 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 25
+    compileSdkVersion 27
 
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 25
+        targetSdkVersion 27
         versionCode 1
         versionName "1.0"
 
@@ -44,5 +44,5 @@ android {
 
 dependencies {
     api project(':microfragments')
-    api 'org.dmfs:jems:1.15'
+    api 'org.dmfs:jems:1.16'
 }
