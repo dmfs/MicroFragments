@@ -52,7 +52,7 @@ public final class HostFragment extends Fragment implements FragmentManager.OnBa
     private FragmentManager mFragmentManager;
     private int mBackStackDepth = 0;
     private ParcelableDovecote<FragmentTransition> mOperationDoveCote;
-    private boolean mInstanceStateSaved;
+    private boolean mQueueTransitions = true;
     private Timestamp mLastTransactionTimestamp = new UiTimestamp();
 
     /**
@@ -71,7 +71,7 @@ public final class HostFragment extends Fragment implements FragmentManager.OnBa
     }
 
 
-    @Nullable
+    @NonNull
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
@@ -85,7 +85,6 @@ public final class HostFragment extends Fragment implements FragmentManager.OnBa
     @Override
     public void onStart()
     {
-        mInstanceStateSaved = false;
         if (currentFragment() == null)
         {
             MicroFragmentHost host = new BasicMicroFragmentHost(mOperationDoveCote.cage());
@@ -113,7 +112,7 @@ public final class HostFragment extends Fragment implements FragmentManager.OnBa
     public void onResume()
     {
         super.onResume();
-        mInstanceStateSaved = false;
+        mQueueTransitions = false;
         if (!mTransitionQueue.isEmpty())
         {
             // maybe onStart wasn't called because the fragment wasn't stopped, just paused
@@ -124,10 +123,10 @@ public final class HostFragment extends Fragment implements FragmentManager.OnBa
 
 
     @Override
-    public void onSaveInstanceState(Bundle outState)
+    public void onPause()
     {
-        mInstanceStateSaved = true;
-        super.onSaveInstanceState(outState);
+        mQueueTransitions = true;
+        super.onPause();
     }
 
 
@@ -176,7 +175,7 @@ public final class HostFragment extends Fragment implements FragmentManager.OnBa
     @Override
     public void onPigeonReturn(@NonNull FragmentTransition fragmentTransition)
     {
-        if (mInstanceStateSaved)
+        if (mQueueTransitions)
         {
             // store the transition for later
             mTransitionQueue.addLast(fragmentTransition);
