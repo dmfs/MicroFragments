@@ -24,15 +24,11 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
-    compile project(':microfragments')
-    compile project(':microwizard')
-    compile 'com.android.support:appcompat-v7:27.1.1'
-    compile 'com.android.support:design:27.1.1'
-    compile 'com.android.support:support-v4:27.1.1'
-    compile 'com.github.dmfs.PigeonPost:localbroadcast-pigeon:0.3'
-    testCompile 'junit:junit:4.12'
+    implementation project(':microfragments')
+    implementation project(':microwizard')
+    implementation 'com.android.support:appcompat-v7:27.1.1'
+    implementation 'com.android.support:design:27.1.1'
+    implementation 'com.android.support:support-v4:27.1.1'
+    implementation 'com.github.dmfs.PigeonPost:localbroadcast-pigeon:0.3'
+    testImplementation 'junit:junit:4.12'
 }
