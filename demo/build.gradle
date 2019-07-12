@@ -1,12 +1,12 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion 29
 
     defaultConfig {
         applicationId "org.dmfs.android.microfragments.demo"
         minSdkVersion 14
-        targetSdkVersion 27
+        targetSdkVersion 29
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -26,9 +26,9 @@ android {
 dependencies {
     implementation project(':microfragments')
     implementation project(':microwizard')
-    implementation 'com.android.support:appcompat-v7:27.1.1'
-    implementation 'com.android.support:design:27.1.1'
-    implementation 'com.android.support:support-v4:27.1.1'
-    implementation 'com.github.dmfs.PigeonPost:localbroadcast-pigeon:0.3'
+    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'androidx.annotation:annotation:1.1.0'
+    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'com.github.dmfs.PigeonPost:localbroadcast-pigeon:0.4'
     testImplementation 'junit:junit:4.12'
 }

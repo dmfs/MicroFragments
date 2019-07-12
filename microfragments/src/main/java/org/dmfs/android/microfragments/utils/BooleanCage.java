@@ -19,11 +19,12 @@ package org.dmfs.android.microfragments.utils;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Parcel;
-import android.support.annotation.NonNull;
-import android.support.v4.content.LocalBroadcastManager;
 
 import org.dmfs.pigeonpost.Cage;
 import org.dmfs.pigeonpost.Pigeon;
+
+import androidx.annotation.NonNull;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 
 /**

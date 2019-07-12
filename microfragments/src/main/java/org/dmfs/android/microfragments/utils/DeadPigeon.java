@@ -17,9 +17,10 @@
 package org.dmfs.android.microfragments.utils;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 
 import org.dmfs.pigeonpost.Pigeon;
+
+import androidx.annotation.NonNull;
 
 
 /**

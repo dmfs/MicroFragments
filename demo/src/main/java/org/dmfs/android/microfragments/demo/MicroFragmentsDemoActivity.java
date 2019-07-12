@@ -18,9 +18,6 @@
 package org.dmfs.android.microfragments.demo;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 
 import org.dmfs.android.microfragments.MicroFragmentHost;
 import org.dmfs.android.microfragments.MicroFragmentState;
@@ -35,6 +32,10 @@ import org.dmfs.android.microfragments.utils.BooleanDovecote;
 import org.dmfs.android.microwizard.MicroWizard;
 import org.dmfs.pigeonpost.Dovecote;
 import org.dmfs.pigeonpost.localbroadcast.ParcelableDovecote;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 
 public final class MicroFragmentsDemoActivity extends AppCompatActivity implements Dovecote.OnPigeonReturnCallback<MicroFragmentState>

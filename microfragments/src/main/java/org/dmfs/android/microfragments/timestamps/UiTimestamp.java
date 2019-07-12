@@ -19,10 +19,11 @@ package org.dmfs.android.microfragments.timestamps;
 import android.os.Looper;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.MainThread;
-import android.support.annotation.NonNull;
 
 import org.dmfs.android.microfragments.Timestamp;
+
+import androidx.annotation.MainThread;
+import androidx.annotation.NonNull;
 
 
 /**

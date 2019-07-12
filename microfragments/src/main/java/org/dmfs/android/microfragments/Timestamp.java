@@ -17,7 +17,8 @@
 package org.dmfs.android.microfragments;
 
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 
 
 /**

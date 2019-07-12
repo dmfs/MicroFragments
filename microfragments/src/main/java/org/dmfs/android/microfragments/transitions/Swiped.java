@@ -18,14 +18,15 @@ package org.dmfs.android.microfragments.transitions;
 
 import android.content.Context;
 import android.os.Parcel;
-import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 
 import org.dmfs.android.microfragments.MicroFragment;
 import org.dmfs.android.microfragments.MicroFragmentHost;
 import org.dmfs.android.microfragments.R;
 import org.dmfs.android.microfragments.Timestamp;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 
 /**
@@ -58,6 +59,7 @@ public final class Swiped implements FragmentTransition
     {
         mDelegate.prepare(context, fragmentManager, host, previousStep);
     }
+
 
     @NonNull
     @Override

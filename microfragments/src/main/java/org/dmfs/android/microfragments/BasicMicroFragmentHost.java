@@ -18,10 +18,11 @@ package org.dmfs.android.microfragments;
 
 import android.content.Context;
 import android.os.Parcel;
-import android.support.annotation.NonNull;
 
 import org.dmfs.android.microfragments.transitions.FragmentTransition;
 import org.dmfs.pigeonpost.Cage;
+
+import androidx.annotation.NonNull;
 
 
 /**

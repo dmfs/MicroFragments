@@ -18,14 +18,15 @@
 package org.dmfs.android.microfragments;
 
 import android.os.Bundle;
-import android.support.annotation.IdRes;
-import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentActivity;
 
 import org.dmfs.android.microfragments.transitions.FragmentTransition;
 import org.dmfs.pigeonpost.Cage;
 import org.dmfs.pigeonpost.Dovecote;
 import org.dmfs.pigeonpost.localbroadcast.ParcelableDovecote;
+
+import androidx.annotation.IdRes;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
 
 
 /**

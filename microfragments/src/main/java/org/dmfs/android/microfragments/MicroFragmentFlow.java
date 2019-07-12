@@ -17,11 +17,11 @@
 
 package org.dmfs.android.microfragments;
 
-import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentActivity;
-
 import org.dmfs.pigeonpost.Cage;
 import org.dmfs.pigeonpost.Pigeon;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
 
 
 /**

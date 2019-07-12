@@ -25,7 +25,9 @@ android {
 }
 
 dependencies {
-    api 'com.github.dmfs.PigeonPost:pigeon-post:0.3'
-    implementation 'com.github.dmfs.PigeonPost:localbroadcast-pigeon:0.3'
+    api 'androidx.appcompat:appcompat:1.0.2'
+    api 'androidx.annotation:annotation:1.1.0'
+    api 'com.github.dmfs.PigeonPost:pigeon-post:0.4'
+    implementation 'com.github.dmfs.PigeonPost:localbroadcast-pigeon:0.4'
     testImplementation 'junit:junit:4.12'
 }

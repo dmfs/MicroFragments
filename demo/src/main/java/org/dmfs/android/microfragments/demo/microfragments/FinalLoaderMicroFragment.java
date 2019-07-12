@@ -20,9 +20,6 @@ package org.dmfs.android.microfragments.demo.microfragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Parcel;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,10 +33,14 @@ import org.dmfs.android.microfragments.demo.R;
 import org.dmfs.android.microfragments.timestamps.UiTimestamp;
 import org.dmfs.android.microfragments.transitions.ForwardResetTransition;
 import org.dmfs.android.microfragments.transitions.Swiped;
-import org.dmfs.android.microwizard.box.Unboxed;
 import org.dmfs.android.microwizard.MicroWizard;
+import org.dmfs.android.microwizard.box.Unboxed;
 
 import java.net.URI;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 
 /**

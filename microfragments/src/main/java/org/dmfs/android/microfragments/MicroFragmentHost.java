@@ -18,9 +18,10 @@ package org.dmfs.android.microfragments;
 
 import android.content.Context;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
 
 import org.dmfs.android.microfragments.transitions.FragmentTransition;
+
+import androidx.annotation.NonNull;
 
 
 /**
