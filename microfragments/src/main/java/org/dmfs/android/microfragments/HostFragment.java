@@ -204,6 +204,7 @@ public final class HostFragment extends Fragment implements FragmentManager.OnBa
                 mFragmentManager, host, microFragment);
         if (!fragmentTransaction.isEmpty())
         {
+            fragmentTransaction.setReorderingAllowed(true);
             fragmentTransaction.commit();
         }
         mFragmentManager.executePendingTransactions();
